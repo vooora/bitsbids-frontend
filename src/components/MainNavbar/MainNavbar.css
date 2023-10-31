@@ -1,0 +1,11 @@
+.navbar-col {
+  background-color: #333333;
+}
+
+.action-icons {
+  flex-direction: row-reverse;
+}
+
+.white-icon {
+  color: white;
+}
