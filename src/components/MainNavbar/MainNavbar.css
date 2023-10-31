@@ -9,3 +9,28 @@
 .white-icon {
   color: white;
 }
+
+.custom-dropdown .dropdown-menu {
+  left: auto;
+  right: -0.75em;
+  top: 3em;
+}
+
+.navbar-col .dropdown-toggle::after {
+  display: none;
+}
+
+.navbar-text {
+  color: white;
+  padding-left: 20px;
+}
+
+.navbar-col.expanded .navbar-text {
+  display: inline;
+}
+
+@media (min-width: 576px) {
+  .navbar-text {
+    display: none !important;
+  }
+}
