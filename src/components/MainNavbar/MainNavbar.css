@@ -10,6 +10,10 @@
   color: white;
 }
 
+.navbar-toggler-icon {
+  background-image: url("../../assets/icons8-menu.svg") !important;
+}
+
 .custom-dropdown .dropdown-menu {
   left: auto;
   right: -0.75em;
@@ -32,5 +36,17 @@
 @media (min-width: 576px) {
   .navbar-text {
     display: none !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .navbar-col .custom-dropdown .dropdown-menu {
+    background-color: #333333;
+    border: none;
+  }
+
+  .navbar-col .custom-dropdown .dropdown-item {
+    background-color: #333333;
+    color: white;
   }
 }

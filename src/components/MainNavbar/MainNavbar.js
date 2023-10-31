@@ -14,8 +14,8 @@ function MainNavbar() {
           <img
             src={whitelogo}
             alt="BITSBIDS Logo"
-            height="30"
-            className="d-inline-block align-top"
+            height="20"
+            className="align-center"
           />
         </Navbar.Brand>
         <Navbar.Toggle
@@ -39,7 +39,12 @@ function MainNavbar() {
               {isExpanded && <span className="navbar-text">Messages</span>}
             </Nav.Link>
             <NavDropdown
-              title={<Person className="white-icon" />}
+              title={
+                <>
+                  <Person className="white-icon" />
+                  {isExpanded && <span className="navbar-text">User</span>}
+                </>
+              }
               id="user-dropdown"
               className="custom-dropdown"
             >
