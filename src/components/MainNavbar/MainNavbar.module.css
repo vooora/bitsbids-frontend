@@ -1,51 +1,51 @@
-.navbar-col {
+.navbarCol {
   background-color: #333333;
 }
 
-.action-icons {
+.actionIcons {
   flex-direction: row-reverse;
 }
 
-.white-icon {
+.whiteIcon {
   color: white;
 }
 
-.navbar-toggler-icon {
+:global(.navbar-toggler-icon) {
   background-image: url("../../assets/icons8-menu.svg") !important;
 }
 
-.custom-dropdown .dropdown-menu {
-  left: auto;
+:global(.dropdown-menu) {
+  left: auto !important;
   right: -0.75em;
-  top: 3em;
+  top: 3em !important;
 }
 
-.navbar-col .dropdown-toggle::after {
+:global(.dropdown-toggle::after) {
   display: none;
 }
 
-.navbar-text {
+.navbarText {
   color: white;
   padding-left: 20px;
 }
 
-.navbar-col.expanded .navbar-text {
+.navbarCol.expanded .navbarText {
   display: inline;
 }
 
 @media (min-width: 576px) {
-  .navbar-text {
+  .navbarText {
     display: none !important;
   }
 }
 
 @media (max-width: 575.98px) {
-  .navbar-col .custom-dropdown .dropdown-menu {
+  :global(.dropdown-menu) {
     background-color: #333333;
     border: none;
   }
 
-  .navbar-col .custom-dropdown .dropdown-item {
+  :global(.dropdown-item) {
     background-color: #333333;
     color: white;
   }

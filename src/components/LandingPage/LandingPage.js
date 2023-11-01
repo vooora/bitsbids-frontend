@@ -2,31 +2,32 @@ import { Container, Form, Button } from "react-bootstrap";
 import landing_page from "../../assets/landing-page.svg";
 import logo from "../../assets/whitelogo.png";
 import MainNavbar from "../MainNavbar/MainNavbar";
+import ProductCard from "../ProductCard/ProductCard";
 import { Search } from "@material-ui/icons";
-import "./LandingPage.css";
+import styles from "./LandingPage.module.css";
 
 function LandingPage() {
   return (
-    <Container fluid className="container-class p-0">
+    <Container fluid className={`${styles.containerClass} p-0`}>
       <MainNavbar />
-      <div className="main-div">
+      <div className={styles.main}>
         <div className="main-img">
           <img
             src={landing_page}
             alt="landing page background"
-            className="bg-image"
+            className={styles.bgImage}
           />
         </div>
-        <div className="main-form">
+        <div className={styles.mainForm}>
           {/* - TODO: logo for mobile */}
-          <img src={logo} alt="Logo" className="logo" />
-          <Form inline className="search-form">
+          <img src={logo} alt="Logo" className={styles.logo} />
+          <Form inline className={styles.searchForm}>
             <Form.Control
               type="text"
               placeholder="Search"
-              className="search-input mr-sm-2"
+              className={`${styles.searchInput} mr-sm-2`}
             />
-            <Button type="submit" className="search-button">
+            <Button type="submit" className={styles.searchButton}>
               <Search />
             </Button>
           </Form>

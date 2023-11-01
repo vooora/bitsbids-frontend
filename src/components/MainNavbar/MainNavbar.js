@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Notifications, Sms, Person, Add } from "@material-ui/icons";
-import "./MainNavbar.css";
+import styles from "./MainNavbar.module.css";
+import "./MainNavbar.module.css";
 import whitelogo from "../../assets/whitelogo.png";
 
 function MainNavbar() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <Navbar expand="sm" className="navbar-col" expanded={isExpanded}>
+    <Navbar expand="sm" className={styles.navbarCol} expanded={isExpanded}>
       <Container fluid>
-        <Navbar.Brand href="/" className="white-icon">
+        <Navbar.Brand href="/" className={styles.whiteIcon}>
           <img
             src={whitelogo}
             alt="BITSBIDS Logo"
@@ -22,31 +23,37 @@ function MainNavbar() {
           aria-controls="basic-navbar-nav"
           onClick={() => setIsExpanded(!isExpanded)}
         />
-        <Navbar.Collapse id="basic-navbar-nav" className="action-icons">
+        <Navbar.Collapse id="basic-navbar-nav" className={styles.actionIcons}>
           <Nav>
             <Nav.Link href="/">
-              <Notifications className="white-icon" />
+              <Notifications className={styles.whiteIcon} />
               {isExpanded && (
-                <span className="navbar-text">Notifications</span>
+                <span className={styles.navbarText}>Notifications</span>
               )}{" "}
             </Nav.Link>
             <Nav.Link href="/">
-              <Add className="white-icon" />
-              {isExpanded && <span className="navbar-text">Add Product</span>}
+              <Add className={styles.whiteIcon} />
+              {isExpanded && (
+                <span className={styles.navbarText}>Add Product</span>
+              )}
             </Nav.Link>
             <Nav.Link href="/">
-              <Sms className="white-icon" />
-              {isExpanded && <span className="navbar-text">Messages</span>}
+              <Sms className={styles.whiteIcon} />
+              {isExpanded && (
+                <span className={styles.navbarText}>Messages</span>
+              )}
             </Nav.Link>
             <NavDropdown
               title={
                 <>
-                  <Person className="white-icon" />
-                  {isExpanded && <span className="navbar-text">User</span>}
+                  <Person className={styles.whiteIcon} />
+                  {isExpanded && (
+                    <span className={styles.navbarText}>User</span>
+                  )}
                 </>
               }
               id="user-dropdown"
-              className="custom-dropdown"
+              className={styles.customDropdown}
             >
               <NavDropdown.Item href="/">Profile</NavDropdown.Item>
               <NavDropdown.Item href="/">My Wallet</NavDropdown.Item>
