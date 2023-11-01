@@ -5,6 +5,7 @@ import MainNavbar from "../MainNavbar/MainNavbar";
 import ProductCard from "../ProductCard/ProductCard";
 import { Search } from "@material-ui/icons";
 import styles from "./LandingPage.module.css";
+import styles from "./LandingPage.module.css";
 
 function LandingPage() {
   return (
