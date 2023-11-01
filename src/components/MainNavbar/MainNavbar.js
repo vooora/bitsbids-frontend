@@ -3,6 +3,7 @@ import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Notifications, Sms, Person, Add } from "@material-ui/icons";
 import styles from "./MainNavbar.module.css";
 import "./MainNavbar.module.css";
+import "./MainNavbar.css";
 import whitelogo from "../../assets/whitelogo.png";
 
 function MainNavbar() {

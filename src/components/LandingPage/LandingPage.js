@@ -33,6 +33,7 @@ function LandingPage() {
           </Form>
         </div>
       </div>
+      <ProductCard />
     </Container>
   );
 }

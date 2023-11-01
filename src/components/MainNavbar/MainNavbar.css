@@ -1,0 +1,25 @@
+.navbar-toggler-icon {
+  background-image: url("../../assets/icons8-menu.svg") !important;
+}
+
+.dropdown-menu {
+  left: auto !important;
+  right: -0.75em;
+  top: 3em !important;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+@media (max-width: 575.98px) {
+  .dropdown-menu {
+    background-color: #333333;
+    border: none;
+  }
+
+  .dropdown-item {
+    background-color: #333333;
+    color: white;
+  }
+}

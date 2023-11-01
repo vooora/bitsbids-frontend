@@ -1,0 +1,8 @@
+.bidButton .btn-primary {
+  --bs-btn-bg: #cddcdf;
+  --bs-btn-color: #000;
+  --bs-btn-border-color: transparent;
+  --bs-btn-hover-border-color: #cddcdf;
+  --bs-btn-active-color: #000;
+  --bs-btn-active-border-color: #cddcdf;
+}
