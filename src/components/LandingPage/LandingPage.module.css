@@ -4,19 +4,22 @@
 
 .bgImage {
   width: 100%;
-  height: 1000px;
+  height: 50rem;
   display: inline;
 }
 
-.mainDiv {
+.main {
   position: relative;
 }
 
 .mainForm {
   position: absolute;
-  right: 30%;
-  left: 30%;
-  bottom: 55%;
+  right: 25%;
+  left: 25%;
+  bottom: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .searchForm {
@@ -50,9 +53,9 @@
 }
 
 .logo {
-  display: block;
-  width: 550px;
-  margin: 0 auto 60px;
+  width: 90%;
+  max-width: 30rem;
+  margin-bottom: 2.5rem;
 }
 
 :global(.btn-primary) {
@@ -62,7 +65,7 @@
   --bs-btn-hover-bg: transparent;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
   .logo {
     display: none;
   }
@@ -71,5 +74,7 @@
     right: 10%;
     left: 10%;
     bottom: 67%;
+    flex-direction: column;
+    align-items: center;
   }
 }

@@ -1,0 +1,10 @@
+.productContainer {
+  /* margin: 60px 26px; */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+  grid-gap: 18px;
+  margin-block: 1rem;
+  padding: 0 2rem;
+  justify-items: center;
+  align-items: center;
+}
