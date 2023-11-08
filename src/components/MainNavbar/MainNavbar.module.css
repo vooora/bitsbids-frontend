@@ -10,20 +10,6 @@
   color: white;
 }
 
-:global(.navbar-toggler-icon) {
-  background-image: url("../../assets/icons8-menu.svg") !important;
-}
-
-:global(.dropdown-menu) {
-  left: auto !important;
-  right: -0.75em;
-  top: 3em !important;
-}
-
-:global(.dropdown-toggle::after) {
-  display: none;
-}
-
 .navbarText {
   color: white;
   padding-left: 20px;
@@ -39,14 +25,8 @@
   }
 }
 
-@media (max-width: 575.98px) {
-  :global(.dropdown-menu) {
-    background-color: #333333;
-    border: none;
-  }
-
-  :global(.dropdown-item) {
-    background-color: #333333;
-    color: white;
+@media (max-width: 768px) {
+  .whiteIcon {
+    display: none;
   }
 }

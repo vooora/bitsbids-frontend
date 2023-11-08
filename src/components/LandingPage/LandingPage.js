@@ -1,6 +1,7 @@
 import { Container, Form, Button } from "react-bootstrap";
 import landing_page from "../../assets/landing-page.svg";
-import logo from "../../assets/whitelogo.png";
+import bids_logo from "../../assets/bids.png";
+import bits_logo from "../../assets/bits.png";
 import MainNavbar from "../MainNavbar/MainNavbar";
 import ProductList from "../ProductList/ProductList";
 import { Search } from "@material-ui/icons";
@@ -17,8 +18,10 @@ function LandingPage() {
           className={styles.bgImage}
         />
         <div className={styles.mainForm}>
-          {/* - TODO: logo for mobile */}
-          <img src={logo} alt="Logo" className={styles.logo} />
+          <div className={styles.logo}>
+            <img src={bits_logo} alt="Logo" className={styles.logoPart1} />
+            <img src={bids_logo} alt="Logo" className={styles.logoPart2} />
+          </div>
           <Form inline className={styles.searchForm}>
             <Form.Control
               type="text"

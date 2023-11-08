@@ -6,7 +6,7 @@ import { Timer } from "@material-ui/icons";
 
 function ProductCard() {
   return (
-    <Card style={{ width: "22rem" }}>
+    <Card style={{ width: "22rem", marginBottom: "2rem" }}>
       <Card.Img variant="top" src={img} />
       <Card.Body>
         <Card.Title>Some Product</Card.Title>

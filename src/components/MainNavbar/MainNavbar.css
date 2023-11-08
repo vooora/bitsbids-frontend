@@ -22,4 +22,7 @@
     background-color: #333333;
     color: white;
   }
+  .navbar > .container-fluid {
+    flex-direction: row-reverse;
+  }
 }
