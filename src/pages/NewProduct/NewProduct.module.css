@@ -1,0 +1,16 @@
+.containerClass {
+  max-width: 100%;
+  font-size: larger;
+}
+
+.mainContent {
+  padding: 0 30%;
+  margin-top: 3vh;
+}
+
+.heading {
+  padding: 0 25%;
+  margin-top: 5vh;
+  margin-bottom: 7vh;
+  font-size: 3rem;
+}
