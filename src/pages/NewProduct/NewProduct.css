@@ -18,7 +18,7 @@
   box-shadow: 0 4px 8px -2px gray;
 }
 
-.col-md-9 .dropdown-menu {
+.dropdown-menu {
   transform: translate3d(0px, 0px, 0px) !important;
 }
 
