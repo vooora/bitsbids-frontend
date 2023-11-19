@@ -4,7 +4,7 @@ import styles from "./ProductCard.module.css";
 import "./ProductCard.css";
 import { Timer } from "@material-ui/icons";
 
-function ProductCard() {
+function SalesProductCard() {
   return (
     <Card style={{ width: "22rem", marginBottom: "2rem" }}>
       <Card.Img variant="top" src={img} />
@@ -36,4 +36,4 @@ function ProductCard() {
   );
 }
 
-export default ProductCard;
+export default SalesProductCard;
