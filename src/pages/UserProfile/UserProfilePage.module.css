@@ -59,10 +59,34 @@
   align-items: center;
 }
 
-.enterMoneyForm {
+.enterMoneyForm1 {
   height: 70px;
   width: 300px;
-  border-radius: 20px;
+  border-radius: 10px;
   border-color: #000000;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.enterMoneyForm2 {
+  height: 50px;
+  width: 300px;
+  border-radius: 10px;
+  border-color: #000000;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.longButton {
+  margin-inline: 10px; /* Add some space between buttons */
+  border: none;
+  border-radius: 10px; /* Adjust the border-radius as needed */
+  padding: 10px 15px; /* Adjust padding as needed */
+  background-color: #cddcdf; /* Change button background color */
+  color: #000000; /* Change button text color */
+  cursor: pointer;
+  width: 12rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -24,7 +24,7 @@ function MyWalletPage() {
                 <FormControl
                   type="text"
                   placeholder=" "
-                  className={styles.enterMoneyForm}
+                  className={styles.enterMoneyForm1}
                 />
                 <Button
                   variant="primary"
