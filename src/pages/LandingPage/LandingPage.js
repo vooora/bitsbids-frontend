@@ -2,8 +2,8 @@ import { Container, Form, Button } from "react-bootstrap";
 import landing_page from "../../assets/landing-page.svg";
 import bids_logo from "../../assets/bids.png";
 import bits_logo from "../../assets/bits.png";
-import MainNavbar from "../MainNavbar/MainNavbar";
-import ProductList from "../ProductList/ProductList";
+import MainNavbar from "../../components/MainNavbar/MainNavbar";
+import ProductList from "../../components/ProductList/ProductList";
 import { Search } from "@material-ui/icons";
 import styles from "./LandingPage.module.css";
 
