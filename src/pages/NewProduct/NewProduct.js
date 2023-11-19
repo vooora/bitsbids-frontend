@@ -1,13 +1,14 @@
-import { Container, Form, Button, Col, Row } from "react-bootstrap";
+import { Container, Form, Button, Col, Row, Dropdown } from "react-bootstrap";
 import { useState } from "react";
 import styles from "./NewProduct.module.css";
 import MainNavbar from "../../components/MainNavbar/MainNavbar";
 import "./NewProduct.css";
 import { MonetizationOn } from "@material-ui/icons";
-import Dropdown from "react-bootstrap/Dropdown";
 
 function NewProduct() {
   const [selected_categories, set_Selected_categories] = useState([]);
+  const [validated, setValidated] = useState(false);
+
   const categories = [
     "Clothing",
     "Jewellery",
@@ -17,6 +18,17 @@ function NewProduct() {
     "Electronics",
     "Essentials",
   ];
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+  };
+
   const toggleCategory = (option) => {
     if (selected_categories.includes(option)) {
       set_Selected_categories(
@@ -26,6 +38,7 @@ function NewProduct() {
       set_Selected_categories([...selected_categories, option]);
     }
   };
+
   return (
     <Container fluid className={`${styles.containerClass} p-0`}>
       <MainNavbar />
@@ -35,11 +48,16 @@ function NewProduct() {
       </div>
 
       <div className={`${styles.mainContent}`}>
-        <Form>
-          <Form.Group as={Row} className="mb-md-5 mb-3">
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form.Group
+            as={Row}
+            className="mb-md-5 mb-3"
+            controlId="validationCustomName"
+          >
             <Form.Label column>Product Name: </Form.Label>
             <Col md="9">
               <Form.Control
+                required
                 placeholder="Product Name"
                 className={styles.inputField}
               />
@@ -75,6 +93,7 @@ function NewProduct() {
             <Col md="9">
               <div key="inline-radio">
                 <Form.Check
+                  required
                   inline
                   label="Brand New"
                   type="radio"
@@ -82,6 +101,7 @@ function NewProduct() {
                   name="radio-group"
                 />
                 <Form.Check
+                  required
                   inline
                   label="Barely Used"
                   type="radio"
@@ -89,6 +109,7 @@ function NewProduct() {
                   name="radio-group"
                 />
                 <Form.Check
+                  required
                   inline
                   label="Used"
                   type="radio"
@@ -98,20 +119,30 @@ function NewProduct() {
               </div>
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-md-5 mb-3">
+          <Form.Group
+            as={Row}
+            className="mb-md-5 mb-3"
+            controlId="validationCustomMedia"
+          >
             <Form.Label column>Product Image: </Form.Label>
             <Col md="9">
               <Form.Control
+                required
                 type="file"
                 multiple
                 className={styles.inputField}
               />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-md-5 mb-3">
+          <Form.Group
+            as={Row}
+            className="mb-md-5 mb-3"
+            controlId="validationCustomDescription"
+          >
             <Form.Label column>Product Description: </Form.Label>
             <Col md="9">
               <Form.Control
+                required
                 as="textarea"
                 rows="4"
                 placeholder="Product Description"
@@ -119,10 +150,15 @@ function NewProduct() {
               />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-md-5 mb-3">
+          <Form.Group
+            as={Row}
+            className="mb-md-5 mb-3"
+            controlId="validationCustomPrice"
+          >
             <Form.Label column>Asking Price: </Form.Label>
             <Col md="9" className="d-flex">
               <Form.Control
+                required
                 type="number"
                 placeholder="Price"
                 className={styles.priceField}
@@ -130,10 +166,15 @@ function NewProduct() {
               <MonetizationOn className={styles.paidIcon} />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-md-5 mb-3">
+          <Form.Group
+            as={Row}
+            className="mb-md-5 mb-3"
+            controlId="validationCustomTime"
+          >
             <Form.Label column>Bid Closing Time: </Form.Label>
             <Col md="3">
               <Form.Control
+                required
                 type="number"
                 placeholder="Days"
                 className={styles.inputField}
@@ -141,6 +182,7 @@ function NewProduct() {
             </Col>
             <Col md="3">
               <Form.Control
+                required
                 type="number"
                 placeholder="Hours"
                 className={styles.inputField}
@@ -148,6 +190,7 @@ function NewProduct() {
             </Col>
             <Col md="3">
               <Form.Control
+                required
                 type="number"
                 placeholder="Minutes"
                 className={styles.inputField}
