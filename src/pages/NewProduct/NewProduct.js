@@ -128,6 +128,7 @@ function NewProduct() {
             <Col md="9">
               <Form.Control
                 required
+                accept=".jpg, .jpeg, .png, .gif, .mp4, .mov"
                 type="file"
                 multiple
                 className={styles.inputField}
