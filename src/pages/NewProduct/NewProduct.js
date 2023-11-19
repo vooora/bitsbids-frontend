@@ -36,7 +36,7 @@ function NewProduct() {
 
       <div className={`${styles.mainContent}`}>
         <Form>
-          <Form.Group as={Row} className="md-md-5 mb-3">
+          <Form.Group as={Row} className="mb-md-5 mb-3">
             <Form.Label column>Product Name: </Form.Label>
             <Col md="9">
               <Form.Control
@@ -70,7 +70,7 @@ function NewProduct() {
               {selected_categories.join(", ")}
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="md-md-5 mb-3">
+          <Form.Group as={Row} className="mb-md-5 mb-3">
             <Form.Label column>Product Quality: </Form.Label>
             <Col md="9">
               <div key="inline-radio">
@@ -98,7 +98,7 @@ function NewProduct() {
               </div>
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="md-md-5 mb-3">
+          <Form.Group as={Row} className="mb-md-5 mb-3">
             <Form.Label column>Product Image: </Form.Label>
             <Col md="9">
               <Form.Control
@@ -108,7 +108,7 @@ function NewProduct() {
               />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="md-md-5 mb-3">
+          <Form.Group as={Row} className="mb-md-5 mb-3">
             <Form.Label column>Product Description: </Form.Label>
             <Col md="9">
               <Form.Control
@@ -119,7 +119,7 @@ function NewProduct() {
               />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="md-md-5 mb-3">
+          <Form.Group as={Row} className="mb-md-5 mb-3">
             <Form.Label column>Asking Price: </Form.Label>
             <Col md="9" className="d-flex">
               <Form.Control
@@ -130,7 +130,7 @@ function NewProduct() {
               <MonetizationOn className={styles.paidIcon} />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="md-md-5 mb-3">
+          <Form.Group as={Row} className="mb-md-5 mb-3">
             <Form.Label column>Bid Closing Time: </Form.Label>
             <Col md="3">
               <Form.Control
