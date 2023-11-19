@@ -28,7 +28,7 @@ function SalesProductCard() {
           </div>
 
           <div className="bidButton">
-            <Button>Bid Now</Button>
+            <Button>Accept Bid</Button>
           </div>
         </div>
       </Card.Body>
