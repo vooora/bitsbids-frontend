@@ -32,7 +32,7 @@ function MainNavbar() {
                 <span className={styles.navbarText}>Notifications</span>
               )}{" "}
             </Nav.Link>
-            <Nav.Link href="/">
+            <Nav.Link href="/new-product">
               <Add className={styles.whiteIcon} />
               {isExpanded && (
                 <span className={styles.navbarText}>Add Product</span>

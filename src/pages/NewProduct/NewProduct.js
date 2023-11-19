@@ -202,7 +202,7 @@ function NewProduct() {
             <Button className="rounded-pill" type="sumbit" id="add-product-btn">
               Add Product
             </Button>
-            <Button className="rounded-pill" id="cancel-btn">
+            <Button href="/" className="rounded-pill" id="cancel-btn">
               Cancel
             </Button>
           </div>
