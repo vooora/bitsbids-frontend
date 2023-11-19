@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Container, Form, Button } from "react-bootstrap";
 import landing_page from "../../assets/landing-page.svg";
 import bids_logo from "../../assets/bids.png";
@@ -7,7 +9,22 @@ import ProductList from "../../components/ProductList/ProductList";
 import { Search } from "@material-ui/icons";
 import styles from "./LandingPage.module.css";
 
+const baseUrl = "http://localhost:8080";
+
 function LandingPage() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${baseUrl}/products`)
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching products: ", error);
+      });
+  }, []);
+
   return (
     <Container fluid className={`${styles.containerClass} p-0`}>
       <MainNavbar />
@@ -34,7 +51,7 @@ function LandingPage() {
           </Form>
         </div>
       </div>
-      <ProductList />
+      <ProductList products={products} />
     </Container>
   );
 }
