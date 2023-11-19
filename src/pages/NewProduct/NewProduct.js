@@ -1,17 +1,21 @@
-import { Container, Form, Button, Col, Row, Dropdown } from "react-bootstrap";
+import { Container, Form, Button, Col, Row } from "react-bootstrap";
 import { useState } from "react";
 import styles from "./NewProduct.module.css";
 import MainNavbar from "../../components/MainNavbar/MainNavbar";
+import "./NewProduct.css";
+import { MonetizationOn } from "@material-ui/icons";
+import Dropdown from "react-bootstrap/Dropdown";
+
 function NewProduct() {
   const [selected_categories, set_Selected_categories] = useState([]);
   const categories = [
-    "CLOTHING",
-    "JEWELLERY",
-    "EDUCATIONAL",
-    "ROOM_ACCESSORIES",
-    "SPORTS",
-    "ELECTRONICS",
-    "ESSENTIALS",
+    "Clothing",
+    "Jewellery",
+    "Educational",
+    "Room Accessories",
+    "Sports",
+    "Electronics",
+    "Essentials",
   ];
   const toggleCategory = (option) => {
     if (selected_categories.includes(option)) {
@@ -25,21 +29,28 @@ function NewProduct() {
   return (
     <Container fluid className={`${styles.containerClass} p-0`}>
       <MainNavbar />
-      <h1 className={styles.heading}>ADD PRODUCT</h1>
+      <div className={styles.heading}>
+        <h1 className={styles.headingAdd}>ADD</h1>
+        <h1>PRODUCT</h1>
+      </div>
+
       <div className={`${styles.mainContent}`}>
         <Form>
-          <Form.Group as={Row} className="mb-5">
-            <Form.Label column>Product Name</Form.Label>
-            <Col sm="10">
-              <Form.Control placeholder="Product Name" />
+          <Form.Group as={Row} className="md-md-5 mb-3">
+            <Form.Label column>Product Name: </Form.Label>
+            <Col md="9">
+              <Form.Control
+                placeholder="Product Name"
+                className={styles.inputField}
+              />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-5">
-            <Form.Label column>Product Tags</Form.Label>
-            <Col sm="10">
+          <Form.Group as={Row} className="mb-md-5 mb-3">
+            <Form.Label column>Product Tags: </Form.Label>
+            <Col md="2">
               <Dropdown>
                 <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  Select Options
+                  Please Select
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   {categories.map((option, index) => (
@@ -53,15 +64,15 @@ function NewProduct() {
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
-              <div className="pt-4">
-                <strong>Selected Categories: </strong>
-                {selected_categories.join(", ")}
-              </div>
+            </Col>
+            <Col md="7" className="pt-md-2 pt-3">
+              <strong>Selected Tags: </strong>
+              {selected_categories.join(", ")}
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-5">
-            <Form.Label column>Product Quality</Form.Label>
-            <Col sm="10">
+          <Form.Group as={Row} className="md-md-5 mb-3">
+            <Form.Label column>Product Quality: </Form.Label>
+            <Col md="9">
               <div key="inline-radio">
                 <Form.Check
                   inline
@@ -87,24 +98,70 @@ function NewProduct() {
               </div>
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-5">
-            <Form.Label column>Product Image</Form.Label>
-            <Col sm="10">
-              <Form.Control type="file" multiple />
+          <Form.Group as={Row} className="md-md-5 mb-3">
+            <Form.Label column>Product Image: </Form.Label>
+            <Col md="9">
+              <Form.Control
+                type="file"
+                multiple
+                className={styles.inputField}
+              />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-5">
-            <Form.Label column>Product Description</Form.Label>
-            <Col sm="10">
-              <Form.Control as="textarea" placeholder="Product Description" />
+          <Form.Group as={Row} className="md-md-5 mb-3">
+            <Form.Label column>Product Description: </Form.Label>
+            <Col md="9">
+              <Form.Control
+                as="textarea"
+                rows="4"
+                placeholder="Product Description"
+                className={styles.inputField}
+              />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-5">
-            <Form.Label column>Asking Price</Form.Label>
-            <Col sm="10">
-              <Form.Control type="number"></Form.Control>
+          <Form.Group as={Row} className="md-md-5 mb-3">
+            <Form.Label column>Asking Price: </Form.Label>
+            <Col md="9" className="d-flex">
+              <Form.Control
+                type="number"
+                placeholder="Price"
+                className={styles.priceField}
+              />
+              <MonetizationOn className={styles.paidIcon} />
             </Col>
           </Form.Group>
+          <Form.Group as={Row} className="md-md-5 mb-3">
+            <Form.Label column>Bid Closing Time: </Form.Label>
+            <Col md="3">
+              <Form.Control
+                type="number"
+                placeholder="Days"
+                className={styles.inputField}
+              />
+            </Col>
+            <Col md="3">
+              <Form.Control
+                type="number"
+                placeholder="Hours"
+                className={styles.inputField}
+              />
+            </Col>
+            <Col md="3">
+              <Form.Control
+                type="number"
+                placeholder="Minutes"
+                className={styles.inputField}
+              />
+            </Col>
+          </Form.Group>
+          <div id="btn-group">
+            <Button className="rounded-pill" type="sumbit" id="add-product-btn">
+              Add Product
+            </Button>
+            <Button className="rounded-pill" id="cancel-btn">
+              Cancel
+            </Button>
+          </div>
         </Form>
       </div>
     </Container>

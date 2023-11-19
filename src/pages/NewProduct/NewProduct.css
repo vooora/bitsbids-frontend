@@ -1,0 +1,66 @@
+.form-check-input {
+  background-color: #f1ede2;
+  border: 1px solid #000000;
+  box-shadow: 0 4px 8px -2px gray;
+}
+
+.MuiSvgIcon-root {
+  margin-left: 10px;
+  margin-top: auto;
+  margin-bottom: auto;
+  transform: scale(1.2);
+}
+
+#dropdown-basic {
+  color: #6a6868;
+  background-color: #f1ede2;
+  border: 1px solid #000000;
+  box-shadow: 0 4px 8px -2px gray;
+}
+
+.col-md-9 .dropdown-menu {
+  transform: translate3d(0px, 0px, 0px) !important;
+}
+
+div #add-product-btn {
+  background-color: #333333;
+  color: #cddcdf;
+  border: 0.2px solid #333333;
+  margin-right: 1em;
+}
+
+div #cancel-btn {
+  background-color: #ccdddd;
+  color: #333333;
+  border: 0.2px solid #ccdddd;
+}
+
+div #add-product-btn,
+div #cancel-btn {
+  font-size: 1em;
+  width: 150px;
+  margin-top: 2.5em;
+  box-shadow: 0 4px 8px -2px gray;
+}
+
+#btn-group {
+  display: flex;
+
+  justify-content: end;
+}
+
+@media (max-width: 976px) {
+  #btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1em;
+  }
+
+  div #add-product-btn,
+  div #cancel-btn {
+    margin-bottom: 1em;
+    margin-right: 0;
+    margin-top: 0;
+  }
+}
