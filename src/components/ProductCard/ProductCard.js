@@ -33,7 +33,6 @@ function ProductCard({ product }) {
 
     return { days, hours, minutes, seconds };
   }
-  console.log(product);
   return (
     <Card style={{ width: "22rem", marginBottom: "2rem" }}>
       <Card.Img variant="top" src={product.mediaUrls[0]} />

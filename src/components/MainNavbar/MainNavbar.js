@@ -6,6 +6,8 @@ import "./MainNavbar.module.css";
 import "./MainNavbar.css";
 import whitelogo from "../../assets/whitelogo.png";
 
+const baseUrl = "http://localhost:3000";
+
 function MainNavbar() {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -32,7 +34,14 @@ function MainNavbar() {
                 <span className={styles.navbarText}>Notifications</span>
               )}{" "}
             </Nav.Link>
-            <Nav.Link href="/new-product">
+            <Nav.Link
+              href="/products"
+              onClick={(e) => {
+                e.preventDefault();
+                sessionStorage.setItem("redirectPath", `${baseUrl}/products`);
+                window.location.href = "/login";
+              }}
+            >
               <Add className={styles.whiteIcon} />
               {isExpanded && (
                 <span className={styles.navbarText}>Add Product</span>
