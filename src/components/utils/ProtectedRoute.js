@@ -1,17 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import checkAuth from "./checkAuth";
 
-const baseUrl = "http://localhost:8080";
-
-const checkAuth = async () => {
-  try {
-    const response = await axios.get(`${baseUrl}/api/auth/check`);
-    return response.status === 200;
-  } catch (error) {
-    return false;
-  }
-};
+const clientBaseUrl = "http://localhost:3000";
 
 function ProtectedRoute({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -26,9 +17,9 @@ function ProtectedRoute({ children }) {
   }, []);
 
   useEffect(() => {
+    console.log(isAuthenticated);
     if (isAuthenticated === false) {
-      sessionStorage.setItem("redirectPath", window.location.pathname);
-      window.location.href = `${baseUrl}/login`;
+      window.location.href = `${clientBaseUrl}/login`;
     }
   }, [isAuthenticated, location.pathname]);
 

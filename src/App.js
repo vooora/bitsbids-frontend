@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
-            path="/products/new"
+            path="/products"
             element={
               <ProtectedRoute>
                 <NewProduct />

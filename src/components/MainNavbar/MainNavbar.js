@@ -5,11 +5,26 @@ import styles from "./MainNavbar.module.css";
 import "./MainNavbar.module.css";
 import "./MainNavbar.css";
 import whitelogo from "../../assets/whitelogo.png";
+import axios from "axios";
 
-const baseUrl = "http://localhost:3000";
+const serverBaseUrl = "http://localhost:8080";
 
 function MainNavbar() {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  axios.defaults.withCredentials = true;
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(`${serverBaseUrl}/logout`, {
+        withCredentials: true,
+      });
+      window.location.href = `${window.location}`;
+      console.log("Logout successful", response);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <Navbar expand="sm" className={styles.navbarCol} expanded={isExpanded}>
@@ -37,9 +52,7 @@ function MainNavbar() {
             <Nav.Link
               href="/products"
               onClick={(e) => {
-                e.preventDefault();
-                sessionStorage.setItem("redirectPath", `${baseUrl}/products`);
-                window.location.href = "/login";
+                localStorage.setItem("redirectPath", `/products`);
               }}
             >
               <Add className={styles.whiteIcon} />
@@ -68,7 +81,7 @@ function MainNavbar() {
               <NavDropdown.Item href="/">Profile</NavDropdown.Item>
               <NavDropdown.Item href="/">My Wallet</NavDropdown.Item>
               <NavDropdown.Item href="/">My Bids</NavDropdown.Item>
-              <NavDropdown.Item href="/">Logout</NavDropdown.Item>
+              <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
