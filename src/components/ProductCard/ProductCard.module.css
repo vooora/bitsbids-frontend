@@ -20,3 +20,9 @@
 .timeLabels span {
   margin: 0 7px;
 }
+
+.cardImage {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}

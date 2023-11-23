@@ -33,9 +33,14 @@ function ProductCard({ product }) {
 
     return { days, hours, minutes, seconds };
   }
+
   return (
     <Card style={{ width: "22rem", marginBottom: "2rem" }}>
-      <Card.Img variant="top" src={product.mediaUrls[0]} />
+      <Card.Img
+        variant="top"
+        src={product.mediaUrls[0]}
+        className={styles.cardImage}
+      />
       <Card.Body>
         <Card.Title>{product.productName}</Card.Title>
         <Card.Text>BID: {product.latestBidAmount}</Card.Text>
