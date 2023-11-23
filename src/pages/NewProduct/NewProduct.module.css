@@ -47,7 +47,7 @@
 
 @media (max-width: 976px) {
   .mainContent {
-    padding: 0 10%;
+    padding: 0 0%;
     margin-top: 3vh;
   }
 
@@ -62,5 +62,18 @@
 
   .headingAdd {
     margin: 0 25%;
+  }
+}
+
+@media (max-width: 1440px) {
+  .mainContent {
+    padding: 0 14%;
+    margin-top: 3vh;
+  }
+}
+@media (max-width: 1200px) {
+  .mainContent {
+    padding: 0 4%;
+    margin-top: 3vh;
   }
 }

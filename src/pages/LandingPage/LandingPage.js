@@ -8,6 +8,7 @@ import MainNavbar from "../../components/MainNavbar/MainNavbar";
 import ProductList from "../../components/ProductList/ProductList";
 import { Search } from "@material-ui/icons";
 import styles from "./LandingPage.module.css";
+import MessageDisplay from "../../components/MessageDisplay/MessageDisplay";
 
 const baseUrl = "http://localhost:8080";
 
@@ -28,6 +29,7 @@ function LandingPage() {
   return (
     <Container fluid className={`${styles.containerClass} p-0`}>
       <MainNavbar />
+      <MessageDisplay />
       <div className={styles.main}>
         <img
           src={landing_page}

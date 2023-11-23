@@ -7,28 +7,31 @@ import NewProduct from "./pages/NewProduct/NewProduct";
 import ProtectedRoute from "./components/utils/ProtectedRoute";
 import LoginPage from "./components/utils/LoginPage";
 import OAuth2CallbackPage from "./components/utils/OAuth2CallbackPage";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route
-            path="/products"
-            element={
-              <ProtectedRoute>
-                <NewProduct />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/login" element={<LoginPage />} />
-          <Route
-            path="/login/oauth2/code/google"
-            element={<OAuth2CallbackPage />}
-          />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route
+              path="/products"
+              element={
+                <ProtectedRoute>
+                  <NewProduct />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/login/oauth2/code/google"
+              element={<OAuth2CallbackPage />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 }

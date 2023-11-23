@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Notifications, Sms, Person, Add } from "@material-ui/icons";
 import styles from "./MainNavbar.module.css";
@@ -6,30 +6,32 @@ import "./MainNavbar.module.css";
 import "./MainNavbar.css";
 import whitelogo from "../../assets/whitelogo.png";
 import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
 const serverBaseUrl = "http://localhost:8080";
 
 function MainNavbar() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { isLoggedIn, checkAuthStatus } = useContext(AuthContext);
 
   axios.defaults.withCredentials = true;
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post(`${serverBaseUrl}/logout`, {
+      await axios.post(`${serverBaseUrl}/logout`, {
         withCredentials: true,
       });
-      window.location.href = `${window.location}`;
-      console.log("Logout successful", response);
+      checkAuthStatus();
+      window.location.reload();
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.log(error);
     }
   };
 
   return (
     <Navbar expand="sm" className={styles.navbarCol} expanded={isExpanded}>
       <Container fluid>
-        <Navbar.Brand href="/" className={styles.whiteIcon}>
+        <Navbar.Brand href="/" className={styles.whiteIcon} title="BITS BIDS">
           <img
             src={whitelogo}
             alt="BITSBIDS Logo"
@@ -43,14 +45,18 @@ function MainNavbar() {
         />
         <Navbar.Collapse id="basic-navbar-nav" className={styles.actionIcons}>
           <Nav>
-            <Nav.Link href="/">
-              <Notifications className={styles.whiteIcon} />
-              {isExpanded && (
-                <span className={styles.navbarText}>Notifications</span>
-              )}{" "}
-            </Nav.Link>
+            {isLoggedIn ? (
+              <Nav.Link href="/" title="Notifications">
+                <Notifications className={styles.whiteIcon} />
+                {isExpanded && (
+                  <span className={styles.navbarText}>Notifications</span>
+                )}{" "}
+              </Nav.Link>
+            ) : null}
+
             <Nav.Link
               href="/products"
+              title="Add Product"
               onClick={(e) => {
                 localStorage.setItem("redirectPath", `/products`);
               }}
@@ -60,29 +66,43 @@ function MainNavbar() {
                 <span className={styles.navbarText}>Add Product</span>
               )}
             </Nav.Link>
-            <Nav.Link href="/">
-              <Sms className={styles.whiteIcon} />
-              {isExpanded && (
-                <span className={styles.navbarText}>Messages</span>
-              )}
-            </Nav.Link>
-            <NavDropdown
-              title={
-                <>
-                  <Person className={styles.whiteIcon} />
-                  {isExpanded && (
-                    <span className={styles.navbarText}>User</span>
-                  )}
-                </>
-              }
-              id="user-dropdown"
-              className={styles.customDropdown}
-            >
-              <NavDropdown.Item href="/">Profile</NavDropdown.Item>
-              <NavDropdown.Item href="/">My Wallet</NavDropdown.Item>
-              <NavDropdown.Item href="/">My Bids</NavDropdown.Item>
-              <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
-            </NavDropdown>
+            {isLoggedIn ? (
+              <Nav.Link href="/" title="Messages">
+                <Sms className={styles.whiteIcon} />
+                {isExpanded && (
+                  <span className={styles.navbarText}>Messages</span>
+                )}
+              </Nav.Link>
+            ) : null}
+            {isLoggedIn ? (
+              <NavDropdown
+                title={
+                  <>
+                    <Person className={styles.whiteIcon} />
+                    {isExpanded && (
+                      <span className={styles.navbarText}>User</span>
+                    )}
+                  </>
+                }
+                id="user-dropdown"
+                className={styles.customDropdown}
+              >
+                <NavDropdown.Item href="/">Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/">My Wallet</NavDropdown.Item>
+                <NavDropdown.Item href="/">My Bids</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleLogout}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : null}
+            {!isLoggedIn ? (
+              <Nav.Link href="/login" title="Login">
+                <Person className={styles.whiteIcon} />
+                {isExpanded && (
+                  <span className={styles.navbarText}>Login</span>
+                )}{" "}
+              </Nav.Link>
+            ) : null}
           </Nav>
         </Navbar.Collapse>
       </Container>
