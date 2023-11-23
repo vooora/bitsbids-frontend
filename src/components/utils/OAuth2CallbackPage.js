@@ -1,21 +1,24 @@
-import { useEffect } from "react";
-import checkAuth from "./checkAuth";
+import { useEffect, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 function OAuth2CallbackPage() {
+  const navigate = useNavigate();
+  const { checkAuthStatus } = useContext(AuthContext);
+  const [isChecking, setIsChecking] = useState(true);
+
   useEffect(() => {
-    const verifyAuthentication = async () => {
-      const isAuthenticated = await checkAuth();
+    checkAuthStatus().then(() => {
+      setIsChecking(false);
+    });
+  }, [checkAuthStatus]);
 
-      if (isAuthenticated) {
-        const redirectPath = localStorage.getItem("redirectPath") || "/";
-        window.location.href = redirectPath;
-      } else {
-        window.location.href = "/login";
-      }
-    };
-
-    verifyAuthentication();
-  }, []);
+  useEffect(() => {
+    if (!isChecking) {
+      const redirectPath = localStorage.getItem("redirectPath") || "/";
+      navigate(redirectPath);
+    }
+  }, [isChecking, navigate]);
 
   return <div>Logging you in...</div>;
 }

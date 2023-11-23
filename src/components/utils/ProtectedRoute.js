@@ -1,33 +1,30 @@
-import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import checkAuth from "./checkAuth";
-
-const clientBaseUrl = "http://localhost:3000";
+import { useEffect, useContext, useState } from "react";
+import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const location = useLocation();
+  const navigate = useNavigate();
+  const { checkAuthStatus } = useContext(AuthContext);
+  const [authCheckCompleted, setAuthCheckCompleted] = useState(false);
 
   useEffect(() => {
-    const verifyAuth = async () => {
-      const authStatus = await checkAuth();
-      setIsAuthenticated(authStatus);
+    const verifyAuthentication = async () => {
+      const isLoggedIn = await checkAuthStatus();
+      setAuthCheckCompleted(true);
+
+      if (!isLoggedIn) {
+        navigate("/login", { replace: true });
+      }
     };
-    verifyAuth();
-  }, []);
 
-  useEffect(() => {
-    console.log(isAuthenticated);
-    if (isAuthenticated === false) {
-      window.location.href = `${clientBaseUrl}/login`;
-    }
-  }, [isAuthenticated, location.pathname]);
+    verifyAuthentication();
+  }, [checkAuthStatus, navigate]);
 
-  if (isAuthenticated === null) {
+  if (!authCheckCompleted) {
     return <div>Loading...</div>;
   }
 
-  return isAuthenticated ? children : null;
+  return children;
 }
 
 export default ProtectedRoute;

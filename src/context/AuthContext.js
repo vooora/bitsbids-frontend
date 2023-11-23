@@ -1,28 +1,39 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
+import axios from "axios";
+
+const serverBaseUrl = "http://localhost:8080";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
 
-  const checkAuthStatus = async () => {
+  const checkAuthStatus = useCallback(async () => {
+    setIsChecking(true);
     try {
-      const response = await axios.get(`${baseUrl}/api/auth/check`);
-      setIsAuthenticated(response.status === 200);
+      const res = await axios.get(`${serverBaseUrl}/api/auth/check`, {
+        withCredentials: true,
+      });
+      setIsLoggedIn(res.status === 200);
+      setIsChecking(false);
+      return res.status === 200;
     } catch (error) {
-      setIsAuthenticated(false);
+      setIsLoggedIn(false);
+      setIsChecking(false);
+      return false;
     }
-  };
+  }, []);
 
   useEffect(() => {
     checkAuthStatus();
-  }, []);
+  }, [checkAuthStatus]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated }}>
+    <AuthContext.Provider value={{ isLoggedIn, isChecking, checkAuthStatus }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export default AuthContext;
