@@ -1,0 +1,24 @@
+.searchResultsContainer {
+  margin-top: 5rem;
+}
+
+.searchBarContainer {
+  margin-top: 60px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.noProductsMessage {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2em;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .searchBarContainer {
+    width: 70%;
+  }
+}

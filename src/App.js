@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/utils/ProtectedRoute";
 import LoginPage from "./components/utils/LoginPage";
 import OAuth2CallbackPage from "./components/utils/OAuth2CallbackPage";
 import { AuthProvider } from "./context/AuthContext";
+import SearchResults from "./pages/SearchResults/SearchResults";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/search" element={<SearchResults />} />
             <Route
               path="/products"
               element={

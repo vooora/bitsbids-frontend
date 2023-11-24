@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import landing_page from "../../assets/landing-page.svg";
 import bids_logo from "../../assets/bids.png";
 import bits_logo from "../../assets/bits.png";
 import MainNavbar from "../../components/MainNavbar/MainNavbar";
 import ProductList from "../../components/ProductList/ProductList";
-import { Search } from "@material-ui/icons";
 import styles from "./LandingPage.module.css";
 import MessageDisplay from "../../components/MessageDisplay/MessageDisplay";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import { useNavigate } from "react-router-dom";
 
 const baseUrl = "http://localhost:8080";
 
 function LandingPage() {
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [shouldNavigate, setShouldNavigate] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -25,6 +29,18 @@ function LandingPage() {
         console.log("Error fetching products: ", error);
       });
   }, []);
+
+  useEffect(() => {
+    if (shouldNavigate) {
+      navigate(`/search?query=${searchQuery}`);
+      setShouldNavigate(false);
+      setSearchQuery("");
+    }
+  }, [shouldNavigate, searchQuery, navigate]);
+
+  const handleSubmit = (searchQuery) => {
+    setShouldNavigate(true);
+  };
 
   return (
     <Container fluid className={`${styles.containerClass} p-0`}>
@@ -41,16 +57,11 @@ function LandingPage() {
             <img src={bits_logo} alt="Logo" className={styles.logoPart1} />
             <img src={bids_logo} alt="Logo" className={styles.logoPart2} />
           </div>
-          <Form inline className={styles.searchForm}>
-            <Form.Control
-              type="text"
-              placeholder="Search"
-              className={`${styles.searchInput} mr-sm-2`}
-            />
-            <Button type="submit" className={styles.searchButton}>
-              <Search />
-            </Button>
-          </Form>
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            handleSubmit={handleSubmit}
+          />
         </div>
       </div>
       <ProductList products={products} />

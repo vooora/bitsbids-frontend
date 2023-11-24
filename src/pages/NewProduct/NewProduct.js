@@ -85,7 +85,7 @@ function NewProduct() {
       return;
     }
 
-    if (startingPriceValue <= 0) {
+    if (startingPriceValue < 0) {
       showInfoBox("danger", "The starting price must be greater than 0.");
       return;
     }
