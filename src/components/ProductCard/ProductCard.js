@@ -43,7 +43,12 @@ function ProductCard({ product }) {
       />
       <Card.Body>
         <Card.Title>{product.productName}</Card.Title>
-        <Card.Text>BID: {product.latestBidAmount}</Card.Text>
+        {product.latestBidAmount ? (
+          <Card.Text>BID: {product.latestBidAmount}</Card.Text>
+        ) : (
+          <Card.Text>Asking Price: {product.startingPrice}</Card.Text>
+        )}
+
         <div className={styles.bottomSection}>
           <div className={styles.timer}>
             <Timer />

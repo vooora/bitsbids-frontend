@@ -96,7 +96,16 @@ function MainNavbar() {
               </NavDropdown>
             ) : null}
             {!isLoggedIn ? (
-              <Nav.Link href="/login" title="Login">
+              <Nav.Link
+                href="/login"
+                title="Login"
+                onClick={(e) => {
+                  localStorage.setItem(
+                    "redirectPath",
+                    window.location.pathname
+                  );
+                }}
+              >
                 <Person className={styles.whiteIcon} />
                 {isExpanded && (
                   <span className={styles.navbarText}>Login</span>

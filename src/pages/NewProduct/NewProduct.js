@@ -99,6 +99,7 @@ function NewProduct() {
     const productName = formData.get("productName");
     const productDescription = formData.get("productDescription");
     const startingPrice = formData.get("startingPrice");
+    const productQuality = formData.get("productQuality");
     let userId;
     try {
       const response = await axios.get(`${serverBaseUrl}/user/me`, {
@@ -164,6 +165,7 @@ function NewProduct() {
       bidClosingTime: formattedDateTime,
       createdAt,
       lastUpdatedAt: null,
+      productQuality,
       productStatus: "ACTIVE",
       mediaUrls,
       categories: processedCategories,
@@ -257,7 +259,8 @@ function NewProduct() {
                   label="Brand New"
                   type="radio"
                   id="inline-radio-1"
-                  name="radio-group"
+                  name="productQuality"
+                  value="Brand New"
                 />
                 <Form.Check
                   required
@@ -265,7 +268,8 @@ function NewProduct() {
                   label="Barely Used"
                   type="radio"
                   id="inline-radio-2"
-                  name="radio-group"
+                  name="productQuality"
+                  value="Barely Used"
                 />
                 <Form.Check
                   required
@@ -273,7 +277,8 @@ function NewProduct() {
                   label="Used"
                   type="radio"
                   id="inline-radio-3"
-                  name="radio-group"
+                  name="productQuality"
+                  value="Used"
                 />
               </div>
             </Col>
