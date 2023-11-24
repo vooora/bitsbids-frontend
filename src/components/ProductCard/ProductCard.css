@@ -5,4 +5,13 @@
   --bs-btn-hover-border-color: #cddcdf;
   --bs-btn-active-color: #000;
   --bs-btn-active-border-color: #cddcdf;
+  --bs-btn-disabled-bg: cddcdf;
+  --bs-btn-disabled-border-color: #000;
+  --bs-btn-disabled-color: #000;
+}
+
+.btn.disabled,
+.btn:disabled,
+fieldset:disabled .btn {
+  cursor: not-allowed !important;
 }

@@ -19,7 +19,12 @@ function MessageDisplay() {
   if (!show) return null;
 
   return (
-    <Alert variant={variant} onClose={() => setShow(false)} dismissible>
+    <Alert
+      variant={variant}
+      onClose={() => setShow(false)}
+      dismissible
+      style={{ marginBottom: 0 }}
+    >
       {message}
     </Alert>
   );

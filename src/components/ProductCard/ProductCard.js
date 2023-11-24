@@ -18,10 +18,14 @@ function ProductCard({ product }) {
   });
 
   function calculateTimeRemaining() {
-    const bidClosingTime = new Date(product.bidClosingTime).getTime();
     const now = new Date().getTime();
+    const bidClosingTime = new Date(product.bidClosingTime).getTime();
+
     const timeDifference = bidClosingTime - now;
 
+    if (timeDifference < 0) {
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
     const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     const hours = Math.floor(
       (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
@@ -33,6 +37,12 @@ function ProductCard({ product }) {
 
     return { days, hours, minutes, seconds };
   }
+
+  const hasTimeElapsed =
+    timeRemaining.days === 0 &&
+    timeRemaining.hours === 0 &&
+    timeRemaining.minutes === 0 &&
+    timeRemaining.seconds === 0;
 
   return (
     <Card style={{ width: "22rem", marginBottom: "2rem" }}>
@@ -66,15 +76,15 @@ function ProductCard({ product }) {
               </Card.Text>
               <div className={styles.timeLabels}>
                 <span>DAYS</span>
-                <span>HRS</span>
-                <span style={{ paddingLeft: "4px" }}>MINS</span>
-                <span style={{ paddingLeft: "2px" }}>SECS</span>
+                <span style={{ paddingLeft: "3px" }}>HRS</span>
+                <span style={{ paddingLeft: "5px" }}>MINS</span>
+                <span style={{ paddingLeft: "3px" }}>SECS</span>
               </div>
             </div>
           </div>
 
           <div className="bidButton">
-            <Button>Bid Now</Button>
+            <Button disabled={hasTimeElapsed}>Bid Now</Button>
           </div>
         </div>
       </Card.Body>

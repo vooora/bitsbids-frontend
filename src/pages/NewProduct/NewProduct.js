@@ -86,7 +86,6 @@ function NewProduct() {
     }
 
     if (startingPriceValue <= 0) {
-      // SHOULD WE ALLOW 0 STARTING PRICE??????
       showInfoBox("danger", "The starting price must be greater than 0.");
       return;
     }
@@ -127,12 +126,15 @@ function NewProduct() {
     now.setDate(now.getDate() + parseInt(days));
     now.setHours(now.getHours() + parseInt(hours));
     now.setMinutes(now.getMinutes() + parseInt(minutes));
+    now.setSeconds(now.getSeconds());
 
     const formattedDateTime = `${now.getFullYear()}-${String(
       now.getMonth() + 1
     ).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}T${String(
       now.getHours()
-    ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:00`;
+    ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(
+      now.getSeconds()
+    ).padStart(2, "0")}`;
 
     const mediaFiles = form.elements["mediaFiles"].files;
     let mediaUrls = [];
