@@ -3,9 +3,11 @@ import { Card, Button } from "react-bootstrap";
 import styles from "./ProductCard.module.css";
 import "./ProductCard.css";
 import { Timer } from "@material-ui/icons";
+import ProductPopup from "../ProductPopup/ProductPopup";
 
 function ProductCard({ product }) {
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -16,6 +18,14 @@ function ProductCard({ product }) {
       clearInterval(intervalId);
     };
   });
+
+  const handleCardClick = () => {
+    setShowPopup(true);
+  };
+
+  const handleBidButtonClick = (e) => {
+    e.stopPropagation();
+  };
 
   function calculateTimeRemaining() {
     const now = new Date().getTime();
@@ -45,50 +55,62 @@ function ProductCard({ product }) {
     timeRemaining.seconds === 0;
 
   return (
-    <Card style={{ width: "22rem", marginBottom: "2rem" }}>
-      <Card.Img
-        variant="top"
-        src={product.mediaUrls[0]}
-        className={styles.cardImage}
-      />
-      <Card.Body>
-        <Card.Title>{product.productName}</Card.Title>
-        {product.latestBidAmount ? (
-          <Card.Text>BID: {product.latestBidAmount}</Card.Text>
-        ) : (
-          <Card.Text>Asking Price: {product.startingPrice}</Card.Text>
-        )}
+    <>
+      <Card
+        style={{ width: "22rem", marginBottom: "2rem", cursor: "pointer" }}
+        onClick={handleCardClick}
+      >
+        <Card.Img
+          variant="top"
+          src={product.mediaUrls[0]}
+          className={styles.cardImage}
+        />
+        <Card.Body>
+          <Card.Title>{product.productName}</Card.Title>
+          {product.latestBidAmount ? (
+            <Card.Text>BID: {product.latestBidAmount}</Card.Text>
+          ) : (
+            <Card.Text>Asking Price: {product.startingPrice}</Card.Text>
+          )}
 
-        <div className={styles.bottomSection}>
-          <div className={styles.timer}>
-            <Timer />
-            <div className="ms-2">
-              <Card.Text style={{ marginBottom: "0", paddingLeft: "4px" }}>
-                {`${timeRemaining.days
-                  .toString()
-                  .padStart(2, "0")} : ${timeRemaining.hours
-                  .toString()
-                  .padStart(2, "0")} : ${timeRemaining.minutes
-                  .toString()
-                  .padStart(2, "0")} : ${timeRemaining.seconds
-                  .toString()
-                  .padStart(2, "0")}`}
-              </Card.Text>
-              <div className={styles.timeLabels}>
-                <span>DAYS</span>
-                <span style={{ paddingLeft: "3px" }}>HRS</span>
-                <span style={{ paddingLeft: "5px" }}>MINS</span>
-                <span style={{ paddingLeft: "3px" }}>SECS</span>
+          <div className={styles.bottomSection}>
+            <div className={styles.timer}>
+              <Timer />
+              <div className="ms-2">
+                <Card.Text style={{ marginBottom: "0", paddingLeft: "4px" }}>
+                  {`${timeRemaining.days
+                    .toString()
+                    .padStart(2, "0")} : ${timeRemaining.hours
+                    .toString()
+                    .padStart(2, "0")} : ${timeRemaining.minutes
+                    .toString()
+                    .padStart(2, "0")} : ${timeRemaining.seconds
+                    .toString()
+                    .padStart(2, "0")}`}
+                </Card.Text>
+                <div className={styles.timeLabels}>
+                  <span>DAYS</span>
+                  <span style={{ paddingLeft: "3px" }}>HRS</span>
+                  <span style={{ paddingLeft: "5px" }}>MINS</span>
+                  <span style={{ paddingLeft: "3px" }}>SECS</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="bidButton">
-            <Button disabled={hasTimeElapsed}>Bid Now</Button>
+            <div className="bidButton">
+              <Button disabled={hasTimeElapsed} onClick={handleBidButtonClick}>
+                Bid Now
+              </Button>
+            </div>
           </div>
-        </div>
-      </Card.Body>
-    </Card>
+        </Card.Body>
+      </Card>
+      <ProductPopup
+        show={showPopup}
+        onHide={() => setShowPopup(false)}
+        product={product}
+      />
+    </>
   );
 }
 

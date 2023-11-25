@@ -1,0 +1,17 @@
+.modal {
+  --bs-modal-width: 70%;
+}
+
+h4 > svg {
+  margin: 0 !important;
+  margin-bottom: 4px !important;
+  padding-left: 3px !important;
+  transform: scale(1.2) !important;
+}
+
+p > svg {
+  margin-top: auto !important;
+  margin: 0 !important;
+  margin-bottom: 3px !important;
+  transform: scale(0.9) !important;
+}
