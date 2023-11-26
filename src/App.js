@@ -9,7 +9,8 @@ import LoginPage from "./components/utils/LoginPage";
 import OAuth2CallbackPage from "./components/utils/OAuth2CallbackPage";
 import { AuthProvider } from "./context/AuthContext";
 import SearchResults from "./pages/SearchResults/SearchResults";
-
+import UserProfilePage from "./pages/UserProfile/UserProfilePage";
+import MyWalletPage from "./pages/UserProfile/MyWalletPage";
 function App() {
   return (
     <div className="App">
@@ -27,10 +28,12 @@ function App() {
               }
             />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/wallet" element={<MyWalletPage />} />
             <Route
               path="/login/oauth2/code/google"
               element={<OAuth2CallbackPage />}
             />
+            <Route path="/user" element={<UserProfilePage />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

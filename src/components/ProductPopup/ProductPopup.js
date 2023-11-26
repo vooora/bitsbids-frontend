@@ -1,9 +1,13 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Modal, Button, Carousel, Row, Col, Form } from "react-bootstrap";
 import styles from "./ProductPopup.module.css";
 import "./ProductPopup.css";
 import { Person, MonetizationOn, Timer } from "@material-ui/icons";
+import axios from "axios";
+import AuthContext from "../../context/AuthContext";
+
+const serverBaseUrl = "http://localhost:8080";
 
 const formatCategory = (category) => {
   return category
@@ -15,11 +19,65 @@ const formatCategory = (category) => {
 
 const ProductPopup = ({ show, onHide, product }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const { isLoggedIn } = useContext(AuthContext);
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
   const minimumBid = product.currentBid
     ? product.currentBid + 1
     : product.startingPrice + 1;
   const [validated, setValidated] = useState(false);
+
+  const fetchUserDetails = async () => {
+    try {
+      const response = await axios.get(`${serverBaseUrl}/user/me`, {
+        withCredentials: true,
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log("Error fetching user details:", error);
+    }
+  };
+
+  const handlePlaceBid = async () => {
+    if (bid < minimumBid) {
+      alert("Your bid must be higher than the current bid.");
+      return;
+    }
+
+    const dateNow = new Date();
+
+    const createdAt = `${dateNow.getFullYear()}-${String(
+      dateNow.getMonth() + 1
+    ).padStart(2, "0")}-${String(dateNow.getDate()).padStart(2, "0")}T${String(
+      dateNow.getHours()
+    ).padStart(2, "0")}:${String(dateNow.getMinutes()).padStart(
+      2,
+      "0"
+    )}:${String(dateNow.getSeconds()).padStart(2, "0")}`;
+
+    const user = await fetchUserDetails();
+    console.log(user);
+
+    const bidObject = {
+      bidderAnonymous: null,
+      product: product,
+      user: {
+        userId: user,
+      },
+      bidAmount: bid,
+      bidTime: createdAt,
+    };
+
+    try {
+      const response = await axios.post(
+        `${serverBaseUrl}/bid/create/${product.productId}`,
+        bidObject
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error placing bid:", error);
+    }
+  };
 
   const calculateStep = (currentBid) => {
     if (currentBid < 50) return 1;
@@ -185,6 +243,9 @@ const ProductPopup = ({ show, onHide, product }) => {
                         See Less
                       </Button>
                     )}
+                    <span key="quality" className={styles.categoryLabel}>
+                      {product.productQuality}
+                    </span>
                   </div>
                 </div>
                 <div className={styles.bottomContent}>
@@ -229,7 +290,7 @@ const ProductPopup = ({ show, onHide, product }) => {
                       </div>
                     </div>
                   </div>
-                  {!hasTimeElapsed && (
+                  {!hasTimeElapsed && isLoggedIn && (
                     <div className={styles.bidControls}>
                       <Button
                         variant="outline-secondary"
@@ -263,7 +324,9 @@ const ProductPopup = ({ show, onHide, product }) => {
                       >
                         +
                       </Button>
-                      <Button variant="primary">BID</Button>
+                      <Button variant="primary" onClick={handlePlaceBid}>
+                        BID
+                      </Button>
                     </div>
                   )}
 
