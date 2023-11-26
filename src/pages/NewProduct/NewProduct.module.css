@@ -1,16 +1,79 @@
 .containerClass {
   max-width: 100%;
-  font-size: larger;
+  font-size: large;
 }
 
 .mainContent {
-  padding: 0 30%;
+  padding: 0 25%;
   margin-top: 3vh;
 }
 
-.heading {
+/* .heading {
   padding: 0 25%;
   margin-top: 5vh;
   margin-bottom: 7vh;
+} */
+
+.heading {
+  display: flex;
+  align-items: center;
+  padding: 0 25%;
+  margin: 5vh 0;
+}
+
+.heading h1 {
+  /* margin: 0; */
+  margin-right: 0.3em;
   font-size: 3rem;
+}
+
+.inputField {
+  background-color: #f1ede2;
+  border: 1px solid #000000;
+  box-shadow: 0 4px 8px -2px gray;
+  color: #000000;
+}
+
+.inputField::placeholder {
+  color: #6a6868;
+}
+
+.priceField {
+  width: 30%;
+  background-color: #f1ede2;
+  border: 1px solid #000000;
+  box-shadow: 0 4px 8px -2px gray;
+}
+
+@media (max-width: 976px) {
+  .mainContent {
+    padding: 0 0%;
+    margin-top: 3vh;
+  }
+
+  .inputField {
+    margin-bottom: 1rem;
+  }
+
+  .heading {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .headingAdd {
+    margin: 0 25%;
+  }
+}
+
+@media (max-width: 1440px) {
+  .mainContent {
+    padding: 0 14%;
+    margin-top: 3vh;
+  }
+}
+@media (max-width: 1200px) {
+  .mainContent {
+    padding: 0 4%;
+    margin-top: 3vh;
+  }
 }

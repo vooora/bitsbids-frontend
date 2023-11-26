@@ -22,36 +22,6 @@
   align-items: center;
 }
 
-.searchForm {
-  position: relative;
-  width: 100%;
-}
-
-.searchInput {
-  padding-right: 20px;
-  padding-left: 25px;
-  width: 100%;
-  border-radius: 20px;
-  height: 45px;
-}
-
-.searchButton {
-  position: absolute;
-  background: none;
-  border: none;
-  right: 5px;
-  top: 20%;
-  transform: translateY(-50%);
-  color: #888;
-  font-size: 24px;
-  height: 24px;
-}
-
-.searchButton:focus {
-  box-shadow: none;
-  outline: none;
-}
-
 .logo {
   width: auto;
   max-width: none;
