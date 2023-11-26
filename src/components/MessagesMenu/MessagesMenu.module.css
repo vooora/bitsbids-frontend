@@ -1,0 +1,9 @@
+.stillnotsure {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    grid-gap: 0.5rem;
+    margin-block: 2rem;
+    padding: 0 1rem;
+    justify-items: left;
+    align-items: left;
+  }
