@@ -11,6 +11,7 @@ import { AuthProvider } from "./context/AuthContext";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import UserProfilePage from "./pages/UserProfile/UserProfilePage";
 import MyWalletPage from "./pages/UserProfile/MyWalletPage";
+import Messages from "./pages/Messages/Messages";
 function App() {
   return (
     <div className="App">
@@ -27,6 +28,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/messages" element={<Messages />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/wallet" element={<MyWalletPage />} />
             <Route
