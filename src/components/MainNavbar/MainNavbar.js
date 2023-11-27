@@ -13,7 +13,6 @@ const serverBaseUrl = "http://localhost:8080";
 
 function MainNavbar() {
   const [isExpanded, setIsExpanded] = useState(false);
-  // const [userId, setUserId] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const { isLoggedIn, checkAuthStatus } = useContext(AuthContext);
   const navigate = useNavigate();
