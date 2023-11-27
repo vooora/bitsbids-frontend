@@ -66,6 +66,7 @@ function LandingPage() {
       </div>
       <ProductList products={products} />
     </Container>
+    
   );
 }
 
