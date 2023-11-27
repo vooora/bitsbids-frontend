@@ -1,4 +1,21 @@
+/* Messages.module.css */
+
 .containerClass {
-    max-width: 100%;
-    align-content: left;
-  }
+  background-color: #f8f9fa; /* Set the background color */
+  border-right: 1px solid #e0e0e0; /* Add a border on the right side */
+  padding: 0px; /* Add padding for spacing inside the container */
+  height: 100vh; /* Make the container full height of the viewport */
+
+}
+
+.container-wrapper {
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  text-align: center; /* Adjust this based on your design */
+}
+
+
+
+/* Add more styling as needed based on your design */
+
