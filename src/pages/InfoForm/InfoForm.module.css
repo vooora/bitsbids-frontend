@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  /*margin-top:20px;*/
+}
+
+.formContainer {
+  width: 300px;
+  border: 1px solid #000; /* Add a border with a color of your choice */
+  padding: 20px; /* Add padding for spacing within the border */
+}
+.form-group {
+  margin-bottom: 20px; /* Add spacing between form groups */
+}
+.form-group .form-control,
+.form-group .btn {
+  margin-bottom: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #000 !important;
+}
+
+.button {
+  background-color: #cddcdf;
+  color: #000;
+  align-items: center;
+  border-color: #cddcdf;
+}
+.button:focus {
+  border-color: #cddcdf;
+}
