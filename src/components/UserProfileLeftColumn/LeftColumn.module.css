@@ -1,9 +1,9 @@
-.appContainer {
+/* .appContainer {
   display: flex;
 }
 
 .leftColumn {
-  width: 400px; /* Adjust the width as needed */
+  width: 400px; 
   height: 95vh;
   background-color: #f1ede2;
   padding: 20px;
@@ -11,7 +11,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .leftColumn button {
   margin-bottom: 10px; /* Add some space between buttons */
@@ -23,4 +23,27 @@
   cursor: pointer;
   width: 15rem;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.appContainer {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically on small screens */
+}
+
+.leftColumn {
+  width: 400px; /* Adjust the width as needed */
+  height: 95vh;
+  background-color: #f1ede2;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease-in-out; /* Smooth transition for the drawer */
+}
+
+@media (max-width: 768px) {
+  .leftColumn {
+    width: 100vw;
+  }
 }

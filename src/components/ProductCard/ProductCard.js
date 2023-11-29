@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import styles from "./ProductCard.module.css";
 import "./ProductCard.css";
-import { Timer } from "@material-ui/icons";
+import { MonetizationOn, Timer } from "@material-ui/icons";
 import ProductPopup from "../ProductPopup/ProductPopup";
 
 function ProductCard({ product }) {
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
   const [showPopup, setShowPopup] = useState(false);
+  const [shouldFocusBidInput, setShouldFocusBidInput] = useState(false);
+
+  const [currentBid, setCurrentBid] = useState(product.latestBidAmount);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -20,11 +23,18 @@ function ProductCard({ product }) {
   });
 
   const handleCardClick = () => {
+    setShouldFocusBidInput(false);
     setShowPopup(true);
   };
 
   const handleBidButtonClick = (e) => {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
+    setShouldFocusBidInput(true);
+    setShowPopup(true);
+  };
+
+  const handleBidUpdate = (newBid) => {
+    setCurrentBid(newBid);
   };
 
   function calculateTimeRemaining() {
@@ -67,10 +77,14 @@ function ProductCard({ product }) {
         />
         <Card.Body>
           <Card.Title>{product.productName}</Card.Title>
-          {product.latestBidAmount ? (
-            <Card.Text>BID: {product.latestBidAmount}</Card.Text>
+          {currentBid ? (
+            <Card.Text>
+              BID: {currentBid} <MonetizationOn />
+            </Card.Text>
           ) : (
-            <Card.Text>Asking Price: {product.startingPrice}</Card.Text>
+            <Card.Text>
+              Asking Price: {product.startingPrice} <MonetizationOn />
+            </Card.Text>
           )}
 
           <div className={styles.bottomSection}>
@@ -109,6 +123,8 @@ function ProductCard({ product }) {
         show={showPopup}
         onHide={() => setShowPopup(false)}
         product={product}
+        focusBidInputOnShow={shouldFocusBidInput}
+        onBidUpdate={handleBidUpdate}
       />
     </>
   );

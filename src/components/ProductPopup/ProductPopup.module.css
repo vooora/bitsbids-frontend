@@ -68,7 +68,7 @@
 }
 
 .categoryLabel {
-  background-color: #e0e0e0;
+  background-color: #cddcdf;
   padding: 0.25rem 0.5rem;
   border-radius: 5px;
   font-size: 0.75rem;
@@ -89,7 +89,12 @@
 }
 
 .productDescription {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+}
+
+.description {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
 }
 
 .seeMoreButton {
@@ -231,7 +236,7 @@
 
 @media (min-width: 800px) {
   .imgStyle {
-    height: 500px;
+    height: 600px;
   }
 }
 

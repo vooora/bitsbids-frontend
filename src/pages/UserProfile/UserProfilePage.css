@@ -1,0 +1,15 @@
+@media (max-width: 768px) {
+  div .closed {
+    display: none;
+  }
+}
+
+h1 > svg {
+  margin-bottom: 2px !important;
+}
+
+@media (max-width: 976px) {
+  /* div > form {
+    flex-direction: column;
+  } */
+}

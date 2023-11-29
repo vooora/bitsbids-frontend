@@ -26,7 +26,24 @@
 }
 
 @media (max-width: 768px) {
+  .navbarCol .homeIcon {
+    display: inline; /* Show home icon on xs to sm screens */
+    color: white;
+  }
+
+  .navbarCol img {
+    display: none; /* Hide BITSBIDS logo on xs to sm screens */
+  }
+
   .whiteIcon {
     display: none;
   }
+}
+
+@media (min-width: 769px) {
+  .navbarCol .homeIcon {
+    display: none; /* Hide home icon on md to larger screens */
+  }
+
+  /* Adjust other styles for larger screens as needed */
 }

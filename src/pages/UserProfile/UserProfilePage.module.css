@@ -1,10 +1,23 @@
-/* App.css */
 .appContainer {
   display: flex;
 }
 
+.menuButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate3d(30%, 30%, 0);
+  z-index: 100;
+  border: none;
+  color: black;
+}
+
+.main {
+  position: relative;
+}
+
 .leftColumn {
-  width: 350px; /* Adjust the width as needed */
+  width: 350px;
   height: 95vh;
   background-color: #f1ede2;
   padding: 20px;
@@ -12,76 +25,84 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.centeredContent {
+  width: 100%;
 }
 
 .leftColumn button {
-  margin-bottom: 10px; /* Add some space between buttons */
+  margin-bottom: 10px;
   border: none;
-  border-radius: 20px; /* Adjust the border-radius as needed */
-  padding: 10px 15px; /* Adjust padding as needed */
-  background-color: #cddcdf; /* Change button background color */
-  color: #000000; /* Change button text color */
+  border-radius: 20px;
+  padding: 10px 15px;
+  background-color: #cddcdf;
+  color: #000000;
   cursor: pointer;
   width: 15rem;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .smallButton {
-  margin-inline: 10px; /* Add some space between buttons */
+  margin-inline: 10px;
   border: none;
-  border-radius: 10px; /* Adjust the border-radius as needed */
-  padding: 10px 15px; /* Adjust padding as needed */
-  background-color: #cddcdf; /* Change button background color */
-  color: #000000; /* Change button text color */
+  border-radius: 10px;
+  padding: 10px 15px;
+  background-color: #cddcdf;
+  color: #000000;
   cursor: pointer;
   width: 5rem;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .mediumButton {
-  margin-inline: 10px; /* Add some space between buttons */
+  margin-inline: 10px;
   border: none;
-  border-radius: 20px; /* Adjust the border-radius as needed */
-  padding: 10px 15px; /* Adjust padding as needed */
-  background-color: #cddcdf; /* Change button background color */
-  color: #000000; /* Change button text color */
+  border-radius: 20px;
+  padding: 10px 0px;
+  background-color: #cddcdf;
+  color: #000000;
   cursor: pointer;
-  width: 10rem;
+  width: 8.5rem;
+  height: 3rem;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .rightColumn {
-  flex: 1; /* Take up the remaining space */
+  flex: 1;
   height: 95vh;
   padding: 20px;
-  background-color: #f0f0f0; /* Set the background color for the right column */
+  background-color: #ffffff;
   justify-content: center;
   align-items: center;
 }
 
 .enterMoneyForm1 {
-  height: 70px;
-  width: 300px;
+  height: 3rem;
+  width: 50%;
+  margin-right: 1rem;
   border-radius: 10px;
   border-color: #000000;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.enterMoneyForm2 {
+/* .enterMoneyForm2 {
   height: 50px;
-  width: 300px;
+  width: 20rem;
   border-radius: 10px;
   border-color: #000000;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
-}
+} */
 
 .longButton {
-  margin-inline: 10px; /* Add some space between buttons */
+  margin-inline: 10px;
   border: none;
-  border-radius: 10px; /* Adjust the border-radius as needed */
-  padding: 10px 15px; /* Adjust padding as needed */
-  background-color: #cddcdf; /* Change button background color */
-  color: #000000; /* Change button text color */
+  border-radius: 10px;
+  padding: 10px 15px;
+  background-color: #cddcdf;
+  color: #000000;
   cursor: pointer;
   width: 12rem;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
@@ -89,4 +110,46 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.walletName {
+  font-size: 2.5rem; /* Adjust as needed */
+  font-weight: bold;
+  line-height: 2rem;
+}
+
+.walletLabel {
+  font-size: 2rem; /* Adjust as needed */
+  /* Add any additional styling here */
+}
+
+@media (min-width: 769px) {
+  .leftColumn {
+    transform: translateX(0);
+  }
+
+  .menuButton {
+    display: none;
+  }
+
+  .rightColumn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  div .closed {
+    display: none;
+  }
+
+  .longButton {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    margin-bottom: 25px;
+  }
+
+  .rightColumn {
+    padding: 40px;
+  }
 }
