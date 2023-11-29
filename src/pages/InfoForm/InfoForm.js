@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 import styles from "./InfoForm.module.css";
 
-import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import React, { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
 
-<p>Please fill in the form to continue</p>;
+<p>Please fill in the form to continue</p>
 const InfoForm = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [selectedHostel, setSelectedHostel] = useState("");
-  const [roomNumber, setRoomNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [selectedHostel, setSelectedHostel] = useState('');
+  const [roomNumber, setRoomNumber] = useState('');
 
   const handlePhoneNumberChange = (e) => {
     setPhoneNumber(e.target.value);
@@ -51,16 +51,17 @@ const InfoForm = () => {
               size="sm"
             >
               <option value="Malaviya">Malaviya</option>
-              <option value="Gandhi">Gandhi</option>
-              <option value="Meera">Meera</option>
-              <option value="Viswakarma">Viswakarma</option>
-              <option value="Valmiki">Valmiki</option>
-              <option value="Gautam">Gautam</option>
-              <option value="Budh">Budh</option>
-              <option value="Shankar">Shankar</option>
-              <option value="Vyas">Vyas</option>
-              <option value="Krishna">Krishna</option>
-              <option value="Ram">Ram</option>
+          <option value="Gandhi">Gandhi</option>
+          <option value="Meera">Meera</option>
+          <option value="Viswakarma">Viswakarma</option>
+          <option value="Valmiki">Valmiki</option>
+          <option value="Gautam">Gautam</option>
+          <option value="Budh">Budh</option>
+          <option value="Shankar">Shankar</option>
+          <option value="Vyas">Vyas</option>
+          <option value="Krishna">Krishna</option>
+          <option value="Ram">Ram</option>
+
             </Form.Control>
           </Form.Group>
 
@@ -83,11 +84,14 @@ const InfoForm = () => {
 };
 
 const CustomColoredButton = () => {
-  return (
-    <div className="d-flex justify-content-center">
-      <Button className={`${styles.button} button`}>Submit</Button>
-    </div>
-  );
-};
+    return (
+      <div className="d-flex justify-content-center">
+        <Button className={`${styles.button} button`}>
+          Submit
+        </Button>
+      </div>
+    );
+  };
+  
 
 export default InfoForm;
