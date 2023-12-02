@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { Notifications, Sms, Person, Add, Home } from "@material-ui/icons";
+import { Sms, Person, Add, Home } from "@material-ui/icons";
 import styles from "./MainNavbar.module.css";
 import "./MainNavbar.module.css";
 import "./MainNavbar.css";
@@ -9,13 +9,29 @@ import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-const serverBaseUrl = "http://localhost:8080";
+const serverBaseUrl = process.env.REACT_APP_BACKEND_URL;
 
 function MainNavbar() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
   const { isLoggedIn, checkAuthStatus } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const fetchUserById = useCallback(
+    async (userId) => {
+      try {
+        const response = await axios.get(`${serverBaseUrl}/user/${userId}`, {
+          withCredentials: true,
+        });
+        setUserDetails(response.data);
+      } catch (error) {
+        navigate("/", {
+          state: { message: "Some error occured.", variant: "danger" },
+        });
+      }
+    },
+    [navigate]
+  );
 
   axios.defaults.withCredentials = true;
 
@@ -26,20 +42,11 @@ function MainNavbar() {
       });
       fetchUserById(response.data);
     } catch (error) {
-      console.log("Error fetching user details:", error);
-    }
-  }, []);
-
-  const fetchUserById = async (userId) => {
-    try {
-      const response = await axios.get(`${serverBaseUrl}/user/${userId}`, {
-        withCredentials: true,
+      navigate("/", {
+        state: { message: "Some error occured.", variant: "danger" },
       });
-      setUserDetails(response.data);
-    } catch (error) {
-      console.log("Error fetching user by ID:", error);
     }
-  };
+  }, [fetchUserById, navigate]);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -48,10 +55,20 @@ function MainNavbar() {
   }, [isLoggedIn, fetchUserDetails]);
 
   const goToUserProfile = () => {
+    localStorage.setItem("userDetails", JSON.stringify(userDetails));
     navigate("/user", { state: { userDetails } });
   };
   const goToWallet = () => {
+    localStorage.setItem("userDetails", JSON.stringify(userDetails));
     navigate("/wallet", { state: { userDetails } });
+  };
+  const goToSales = () => {
+    localStorage.setItem("userDetails", JSON.stringify(userDetails));
+    navigate("/sales", { state: { userDetails } });
+  };
+  const goToBids = () => {
+    localStorage.setItem("userDetails", JSON.stringify(userDetails));
+    navigate("/bids", { state: { userDetails } });
   };
 
   const handleLogout = async () => {
@@ -61,9 +78,7 @@ function MainNavbar() {
       });
       checkAuthStatus();
       window.location.reload();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -84,15 +99,6 @@ function MainNavbar() {
         />
         <Navbar.Collapse id="basic-navbar-nav" className={styles.actionIcons}>
           <Nav>
-            {isLoggedIn ? (
-              <Nav.Link href="/" title="Notifications">
-                <Notifications className={styles.whiteIcon} />
-                {isExpanded && (
-                  <span className={styles.navbarText}>Notifications</span>
-                )}{" "}
-              </Nav.Link>
-            ) : null}
-
             <Nav.Link
               href="/products"
               title="Add Product"
@@ -106,7 +112,7 @@ function MainNavbar() {
               )}
             </Nav.Link>
             {isLoggedIn ? (
-              <Nav.Link href="/" title="Messages">
+              <Nav.Link href="/messages" title="Messages">
                 <Sms className={styles.whiteIcon} />
                 {isExpanded && (
                   <span className={styles.navbarText}>Messages</span>
@@ -132,7 +138,10 @@ function MainNavbar() {
                 <NavDropdown.Item onClick={goToWallet}>
                   My Wallet
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/">My Bids</NavDropdown.Item>
+                <NavDropdown.Item onClick={goToSales}>
+                  My Sales
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={goToBids}>My Bids</NavDropdown.Item>
                 <NavDropdown.Item onClick={handleLogout}>
                   Logout
                 </NavDropdown.Item>

@@ -1,9 +1,10 @@
 import { Alert } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function MessageDisplay() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
   const [variant, setVariant] = useState("");
@@ -13,8 +14,10 @@ function MessageDisplay() {
       setMessage(location.state.message);
       setVariant(location.state.variant || "info");
       setShow(true);
+
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location]);
+  }, [location, navigate]);
 
   if (!show) return null;
 

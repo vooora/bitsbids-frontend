@@ -10,25 +10,44 @@ import styles from "./LandingPage.module.css";
 import MessageDisplay from "../../components/MessageDisplay/MessageDisplay";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
 
-const baseUrl = "http://localhost:8080";
+const baseUrl = process.env.REACT_APP_BACKEND_URL;
 
 function LandingPage() {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentUserId, setCurrentUserId] = useState("");
   const [shouldNavigate, setShouldNavigate] = useState(false);
   const navigate = useNavigate();
 
+  const fetchCurrentUserId = useCallback(async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/user/me`);
+      setCurrentUserId(response.data);
+    } catch (error) {}
+  }, []);
+
   useEffect(() => {
+    fetchCurrentUserId();
     axios
       .get(`${baseUrl}/products`)
       .then((response) => {
-        setProducts(response.data);
+        if (currentUserId) {
+          const filteredProducts = response.data.filter(
+            (product) => product.anonymousSeller.user.userId !== currentUserId
+          );
+          setProducts(filteredProducts);
+        } else {
+          setProducts(response.data);
+        }
       })
       .catch((error) => {
-        console.log("Error fetching products: ", error);
+        navigate("/", {
+          state: { message: "Error fetching products", variant: "danger" },
+        });
       });
-  }, []);
+  }, [currentUserId, navigate, fetchCurrentUserId]);
 
   useEffect(() => {
     if (shouldNavigate) {
@@ -66,7 +85,6 @@ function LandingPage() {
       </div>
       <ProductList products={products} />
     </Container>
-    
   );
 }
 

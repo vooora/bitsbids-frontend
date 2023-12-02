@@ -73,3 +73,47 @@
 #chat1 .form-outline .form-control ~ .form-label {
   color: #f1ede2;
 }
+
+.message.right {
+  align-self: flex-end;
+  /* Additional styles for messages sent by the current user */
+}
+
+.message.left {
+  align-self: flex-start;
+  /* Additional styles for messages received from others */
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-messages {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.message-row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.user-message .message-text {
+  background-color: #cddcdf;
+  margin-left: auto;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.other-message .message-text {
+  background-color: #f1ede2;
+  margin-right: auto;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.chat-input {
+  padding: 10px;
+}

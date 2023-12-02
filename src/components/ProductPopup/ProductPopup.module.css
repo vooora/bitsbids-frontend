@@ -228,6 +228,10 @@
   height: calc(1.5em + 0.75rem + 2px);
 }
 
+.anonSellerLink {
+  text-decoration: underline;
+}
+
 @media (min-width: 1200px) {
   .imgStyle {
     height: 800px;

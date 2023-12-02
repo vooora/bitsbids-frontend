@@ -4,16 +4,22 @@ import styles from "./UserProfilePage.module.css";
 import "./UserProfilePage.css";
 import { Button, Row, Col } from "react-bootstrap";
 import LeftColumnProfile from "../../components/UserProfileLeftColumn/LeftColumn";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import { useContext } from "react";
+import { Avatar } from "@material-ui/core";
+import image from "../../assets/icons8-avatar-48.png";
 
-const serverBaseUrl = "http://localhost:8080";
+const serverBaseUrl = process.env.REACT_APP_BACKEND_URL;
 
 function UserProfilePage() {
   const location = useLocation();
-  const userDetails = location.state?.userDetails;
+  const [userDetails, setUserDetails] = useState(
+    location.state?.userDetails
+      ? location.state?.userDetails
+      : localStorage.getItem("userDetails")
+  );
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { checkAuthStatus } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -21,6 +27,14 @@ function UserProfilePage() {
     if (window.innerWidth <= 768) {
       setIsDrawerOpen(!isDrawerOpen);
     }
+  };
+  const getUserDetail = (detail) => {
+    return userDetails && userDetails[detail] !== "NA"
+      ? userDetails[detail]
+      : "Not provided";
+  };
+  const completeProfile = () => {
+    navigate("/profile");
   };
 
   const handleLogout = async () => {
@@ -31,9 +45,29 @@ function UserProfilePage() {
       checkAuthStatus();
       navigate("/");
     } catch (error) {
-      console.log(error);
+      navigate("/", {
+        state: { message: "Some error occured.", variant: "danger" },
+      });
     }
   };
+
+  useEffect(() => {
+    if (!userDetails) {
+      const storedDetails = localStorage.getItem("userDetails");
+      if (storedDetails) {
+        setUserDetails(JSON.parse(storedDetails));
+      }
+    } else {
+    }
+  }, [userDetails]);
+
+  useEffect(() => {
+    const storedDetails = localStorage.getItem("userDetails");
+    if (storedDetails) {
+      setUserDetails(JSON.parse(storedDetails));
+    }
+  }, []);
+
   return (
     <>
       <MainNavbar />
@@ -59,7 +93,12 @@ function UserProfilePage() {
               >
                 <Col lg={6}>
                   <Row style={{ marginBottom: "2rem" }}>
-                    <Col lg={6}>insert the image</Col>
+                    <Col lg={6}>
+                      <Avatar
+                        src={image}
+                        style={{ width: "60%", height: "80%" }}
+                      />
+                    </Col>
                     <Col lg={6}>
                       <h1 className="display-5 mb-2">
                         <b>
@@ -78,10 +117,19 @@ function UserProfilePage() {
                     <Col lg={6}>
                       <Row>
                         <Col>
-                          <h5 className="mb-4">8978505458</h5>
+                          <h5 className="mb-4">{getUserDetail("phoneNo")}</h5>
                         </Col>
-                        <Col>/edit</Col>
                       </Row>
+                    </Col>
+                  </Row>
+                  <Row className="align-items-center justify-content-center">
+                    <Col lg={6}>
+                      <h3 className="mb-4">
+                        <b>BITS Email ID</b>
+                      </h3>
+                    </Col>
+                    <Col lg={6}>
+                      <h5 className="mb-4">{userDetails.email}</h5>
                     </Col>
                   </Row>
                   <Row
@@ -90,11 +138,11 @@ function UserProfilePage() {
                   >
                     <Col lg={6}>
                       <h3 className="mb-4">
-                        <b>BITS Email ID</b>
+                        <b>Hostel</b>
                       </h3>
                     </Col>
                     <Col lg={6}>
-                      <h5 className="mb-4">{userDetails.email}</h5>
+                      <h5 className="mb-4">{getUserDetail("hostel")}</h5>
                     </Col>
                   </Row>
                 </Col>
@@ -107,13 +155,17 @@ function UserProfilePage() {
                   >
                     Log Out
                   </Button>
-                  <Button
-                    variant="primary"
-                    size="md"
-                    className={styles.longButton}
-                  >
-                    Delete Account
-                  </Button>
+                  {(getUserDetail("phoneNo") === "Not provided" ||
+                    getUserDetail("hostel") === "Not provided") && (
+                    <Button
+                      variant="primary"
+                      size="md"
+                      className={styles.longButton}
+                      onClick={completeProfile}
+                    >
+                      Complete Profile
+                    </Button>
+                  )}
                 </Row>
               </div>
             </div>

@@ -5,14 +5,12 @@ import { useEffect, useState } from "react";
 import ProductList from "../../components/ProductList/ProductList";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
-const baseUrl = process.env.REACT_APP_BACKEND_URL;
+const baseUrl = "http://localhost:8080";
 
-function MySalesPage() {
+function MyBidsPage() {
   const [products, setProducts] = useState([]);
   const location = useLocation();
-  const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState(
     location.state?.userDetails
       ? location.state?.userDetails
@@ -25,21 +23,22 @@ function MySalesPage() {
       if (storedDetails) {
         setUserDetails(JSON.parse(storedDetails));
       }
-    } else {
     }
-  }, [userDetails, navigate]);
+  }, [userDetails]);
   useEffect(() => {
     axios
       .get(
-        `${baseUrl}/products/user/${
+        `${baseUrl}/products/user/bids/${
           JSON.parse(localStorage.getItem("userDetails")).userId
         }`
       )
       .then((response) => {
         setProducts(response.data);
       })
-      .catch((error) => {});
-  }, [userDetails.userId, navigate]);
+      .catch((error) => {
+        console.log("Error fetching products: ", error);
+      });
+  }, [userDetails.userId]);
 
   return (
     <>
@@ -64,4 +63,4 @@ function MySalesPage() {
   );
 }
 
-export default MySalesPage;
+export default MyBidsPage;

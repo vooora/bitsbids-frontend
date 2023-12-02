@@ -113,14 +113,13 @@
 }
 
 .walletName {
-  font-size: 2.5rem; /* Adjust as needed */
+  font-size: 2.5rem;
   font-weight: bold;
   line-height: 2rem;
 }
 
 .walletLabel {
-  font-size: 2rem; /* Adjust as needed */
-  /* Add any additional styling here */
+  font-size: 2rem;
 }
 
 @media (min-width: 769px) {

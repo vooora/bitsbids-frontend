@@ -3,11 +3,12 @@ import { useState, useEffect, useContext, useCallback, useRef } from "react";
 import { Modal, Button, Carousel, Row, Col, Form } from "react-bootstrap";
 import styles from "./ProductPopup.module.css";
 import "./ProductPopup.css";
-import { Person, MonetizationOn, Timer } from "@material-ui/icons";
+import { Person, Timer } from "@material-ui/icons";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-const serverBaseUrl = "http://localhost:8080";
+const serverBaseUrl = process.env.REACT_APP_BACKEND_URL;
 
 const formatCategory = (category) => {
   return category
@@ -29,10 +30,17 @@ const ProductPopup = ({
   const [bidSuccess, setBidSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [winningMessage, setWinningMessage] = useState("");
+  // const [isSold, setIsSold] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
   const [latestBid, setLatestBid] = useState(null);
   const { isLoggedIn } = useContext(AuthContext);
-  const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
+
+  const [currentProductStatus, setCurrentProductStatus] = useState(
+    product.productStatus
+  );
+
   const bidInputRef = useRef(null);
+  const navigate = useNavigate();
   const minimumBid = productState.latestBidAmount
     ? productState.latestBidAmount + 1
     : productState.startingPrice + 1;
@@ -42,10 +50,8 @@ const ProductPopup = ({
       const response = await axios.get(`${serverBaseUrl}/user/me`, {
         withCredentials: true,
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log("Error fetching user details:", error);
       setErrorMessage(
         error.response.data || "An error occurred while placing the bid."
       );
@@ -59,7 +65,6 @@ const ProductPopup = ({
       });
       return response.data;
     } catch (error) {
-      console.log("Error fetching user by ID:", error);
       setErrorMessage(
         error.response.data || "An error occurred while placing the bid."
       );
@@ -76,6 +81,37 @@ const ProductPopup = ({
     setBidSuccess(false);
     setErrorMessage("");
     onHide();
+  };
+
+  const initiateChatWithSeller = async () => {
+    try {
+      const userDetails = await fetchUserDetails();
+      const buyerId = userDetails;
+      const sellerId = productState.anonymousSeller.user.userId;
+      const productId = productState.productId;
+
+      const sessionResponse = await axios.post(
+        `${serverBaseUrl}/chat/startSession`,
+        {
+          buyerId: buyerId,
+          sellerId: sellerId,
+          productId: productId,
+        }
+      );
+
+      if (sessionResponse.status === 200) {
+        navigate("/messages", {
+          state: { newSessionId: sessionResponse.data },
+        });
+      }
+    } catch (error) {
+      navigate("/", {
+        state: {
+          message: "Error initiating chat with seller.",
+          variant: "danger",
+        },
+      });
+    }
   };
 
   const fetchLatestBid = useCallback(async () => {
@@ -99,9 +135,7 @@ const ProductPopup = ({
           );
         }
       }
-    } catch (error) {
-      console.error("Error fetching latest bid:", error);
-    }
+    } catch (error) {}
   }, [isLoggedIn, product.productId, productState.latestBid, onBidUpdate]);
 
   useEffect(() => {
@@ -148,7 +182,6 @@ const ProductPopup = ({
         `${serverBaseUrl}/bid/create/${product.productId}`,
         bidObject
       );
-      console.log(response.data);
       setBidSuccess(true);
       const updatedProductResponse = await axios.get(
         `${serverBaseUrl}/products/${product.productId}`
@@ -176,7 +209,6 @@ const ProductPopup = ({
       setBid(newMinimumBid);
       setErrorMessage("");
     } catch (error) {
-      console.error("Error placing bid:", error);
       setBidSuccess(false);
       setErrorMessage(
         error.response.data || "An error occurred while placing the bid."
@@ -228,9 +260,53 @@ const ProductPopup = ({
     };
   });
 
-  function calculateTimeRemaining() {
+  const handleFreezeBid = async () => {
+    try {
+      const response = await axios.put(
+        `${serverBaseUrl}/products/${productState.productId}/changeBidStatus`
+      );
+      if (response.status === 200) {
+        setProductState({ ...productState, productStatus: "SOLD" });
+        setCurrentProductStatus("SOLD");
+        setBidSuccess(true);
+      }
+    } catch (error) {
+      setErrorMessage("Error occurred while freezing the bid.");
+    }
+  };
+
+  const handleWithdraw = async () => {
+    try {
+      const response = await axios.put(
+        `${serverBaseUrl}/products/${productState.productId}/changeBidStatus`
+      );
+      if (response.status === 200) {
+        setProductState({ ...productState, productStatus: "WITHDRAWN" });
+        setCurrentProductStatus("WITHDRAWN");
+      }
+    } catch (error) {
+      setErrorMessage("Error occurred while withdrawing the product.");
+    }
+  };
+
+  const calculateTimeRemaining = useCallback(() => {
     const now = new Date().getTime();
-    const bidClosingTime = new Date(productState.bidClosingTime).getTime();
+
+    const getYear = parseInt(product.bidClosingTime[0], 10);
+    const getMonth = parseInt(product.bidClosingTime[1], 10) - 1;
+    const getDay = parseInt(product.bidClosingTime[2], 10);
+    const getHours = parseInt(product.bidClosingTime[3], 10);
+    const getMinutes = parseInt(product.bidClosingTime[4], 10);
+    const getSeconds = parseInt(product.bidClosingTime[5], 10);
+
+    const bidClosingTime = new Date(
+      getYear,
+      getMonth,
+      getDay,
+      getHours,
+      getMinutes,
+      getSeconds
+    ).getTime();
 
     const timeDifference = bidClosingTime - now;
 
@@ -247,7 +323,66 @@ const ProductPopup = ({
     const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
     return { days, hours, minutes, seconds };
-  }
+  }, [product.bidClosingTime]);
+
+  const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
+
+  const checkAndUpdateProductStatus = useCallback(() => {
+    const timeRemaining = calculateTimeRemaining();
+    if (
+      timeRemaining.days === 0 &&
+      timeRemaining.hours === 0 &&
+      timeRemaining.minutes === 0 &&
+      timeRemaining.seconds === 0
+    ) {
+      setCurrentProductStatus(product.productStatus);
+    }
+  }, [calculateTimeRemaining, product.productStatus]);
+
+  useEffect(() => {
+    setProductState(product);
+    checkAndUpdateProductStatus();
+  }, [product, checkAndUpdateProductStatus]);
+
+  useEffect(() => {
+    const checkIfUserIsSeller = async () => {
+      if (isLoggedIn) {
+        const userDetails = await fetchUserDetails();
+        if (userDetails && product) {
+          setIsSeller(userDetails === product.user.userId);
+        }
+      } else {
+        setIsSeller(false); // Set to false when not logged in
+      }
+    };
+    checkIfUserIsSeller();
+  }, [product, isLoggedIn]);
+
+  const initiateChatWithBidder = async (bidderId) => {
+    try {
+      const sessionResponse = await axios.post(
+        `${serverBaseUrl}/chat/startSession`,
+        {
+          buyerId: bidderId,
+          sellerId: productState.anonymousSeller.user.userId,
+          productId: productState.productId,
+        }
+      );
+
+      if (sessionResponse.status === 200) {
+        navigate("/messages", {
+          state: { newSessionId: sessionResponse.data },
+        });
+      }
+    } catch (error) {
+      navigate("/", {
+        state: {
+          message: "Error initiating chat with bidder.",
+          variant: "danger",
+        },
+      });
+    }
+  };
 
   const hasTimeElapsed =
     timeRemaining.days === 0 &&
@@ -264,15 +399,19 @@ const ProductPopup = ({
       : productState.productDescription;
   const formattedCategories = productState.categories.map(formatCategory);
 
+  const isVideo = (url) => {
+    return /\.(mp4|mov)$/i.test(url);
+  };
+
   let bidText;
   if (hasTimeElapsed) {
     bidText = productState.latestBid
-      ? `Winning Bid: ${productState.latestBidAmount}`
-      : `Asking Price: ${productState.startingPrice}`;
+      ? `Winning Bid: ₹${productState.latestBidAmount}`
+      : `Asking Price: ₹${productState.startingPrice}`;
   } else {
     bidText = productState.latestBid
-      ? `Current Bid: ${productState.latestBidAmount}`
-      : `Asking Price: ${productState.startingPrice}`;
+      ? `Current Bid: ₹${productState.latestBidAmount}`
+      : `Asking Price: ₹${productState.startingPrice}`;
   }
 
   return (
@@ -286,11 +425,21 @@ const ProductPopup = ({
                 <Carousel>
                   {productState.mediaUrls.map((url, index) => (
                     <Carousel.Item key={index}>
-                      <img
-                        className={`d-block ${styles.imgStyle}`}
-                        src={url}
-                        alt={`Slide ${index + 1}`}
-                      />
+                      {isVideo(url) ? (
+                        <video
+                          controls
+                          className={`d-block ${styles.imgStyle}`}
+                        >
+                          <source src={url} type="video/mp4" /> Your browser
+                          does not support the video tag.
+                        </video>
+                      ) : (
+                        <img
+                          className={`d-block ${styles.imgStyle}`}
+                          src={url}
+                          alt={`Slide ${index + 1}`}
+                        />
+                      )}
                     </Carousel.Item>
                   ))}
                 </Carousel>
@@ -302,18 +451,24 @@ const ProductPopup = ({
                   </Modal.Title>
 
                   <div className={styles.sellerAndCategory}>
-                    <div className={styles.sellerInfo}>
-                      <Person
-                        style={{
-                          paddingRight: "5px",
-                          paddingBottom: "3px",
-                          marginLeft: "0",
-                        }}
-                      />
-                      <a href="/" className={styles.anonSellerLink}>
-                        {productState.anonymousSeller.anonUsername}
-                      </a>
-                    </div>
+                    {!isSeller && (
+                      <div className={styles.sellerInfo}>
+                        <Person
+                          style={{
+                            paddingRight: "5px",
+                            paddingBottom: "3px",
+                            marginLeft: "0",
+                          }}
+                        />
+                        <span
+                          className={`${styles.anonSellerLink} link-like`}
+                          onClick={initiateChatWithSeller}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {productState.anonymousSeller.anonUsername}
+                        </span>
+                      </div>
+                    )}
                     <div className={styles.categoryLabels}>
                       {formattedCategories.map((category, index) => (
                         <span key={index} className={styles.categoryLabel}>
@@ -353,93 +508,165 @@ const ProductPopup = ({
                   <div className={styles.currentBidSection}>
                     <p className={styles.currentBidText}>
                       <b>{bidText}</b>
-                      <MonetizationOn className={styles.paidIcon} />
                     </p>
-                    <div className={styles.timerWrapper}>
-                      <Timer
-                        style={{
-                          marginBottom: "4px",
-                          marginRight: "12px",
-                          transform: "scale(1.5)",
-                        }}
-                      />
-                      <div className={styles.timeUnits}>
-                        <div className={styles.timeUnit}>
-                          <span className={styles.timeValue}>
-                            {timeRemaining.days.toString().padStart(2, "0")}
-                          </span>
-                          <span className={styles.timeLabel}>Days</span>
-                        </div>
-                        <div className={styles.timeUnit}>
-                          <span className={styles.timeValue}>
-                            {timeRemaining.hours.toString().padStart(2, "0")}
-                          </span>
-                          <span className={styles.timeLabel}>Hrs</span>
-                        </div>
-                        <div className={styles.timeUnit}>
-                          <span className={styles.timeValue}>
-                            {timeRemaining.minutes.toString().padStart(2, "0")}
-                          </span>
-                          <span className={styles.timeLabel}>Mins</span>
-                        </div>
-                        <div className={styles.timeUnit}>
-                          <span className={styles.timeValue}>
-                            {timeRemaining.seconds.toString().padStart(2, "0")}
-                          </span>
-                          <span className={styles.timeLabel}>Secs</span>
+                    {currentProductStatus === "ACTIVE" ? (
+                      <div className={styles.timerWrapper}>
+                        <Timer
+                          style={{
+                            marginBottom: "4px",
+                            marginRight: "12px",
+                            transform: "scale(1.5)",
+                          }}
+                        />
+                        <div className={styles.timeUnits}>
+                          <div className={styles.timeUnit}>
+                            <span className={styles.timeValue}>
+                              {timeRemaining.days.toString().padStart(2, "0")}
+                            </span>
+                            <span className={styles.timeLabel}>Days</span>
+                          </div>
+                          <div className={styles.timeUnit}>
+                            <span className={styles.timeValue}>
+                              {timeRemaining.hours.toString().padStart(2, "0")}
+                            </span>
+                            <span className={styles.timeLabel}>Hrs</span>
+                          </div>
+                          <div className={styles.timeUnit}>
+                            <span className={styles.timeValue}>
+                              {timeRemaining.minutes
+                                .toString()
+                                .padStart(2, "0")}
+                            </span>
+                            <span className={styles.timeLabel}>Mins</span>
+                          </div>
+                          <div className={styles.timeUnit}>
+                            <span className={styles.timeValue}>
+                              {timeRemaining.seconds
+                                .toString()
+                                .padStart(2, "0")}
+                            </span>
+                            <span className={styles.timeLabel}>Secs</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ) : (
+                      <p style={{ color: "green", fontSize: "1.5rem" }}>
+                        {currentProductStatus}
+                      </p>
+                    )}
                   </div>
-                  {latestBid && (
-                    <p>
-                      Your latest bid: {latestBid.bidAmount}
-                      <MonetizationOn />
-                    </p>
-                  )}
+                  {latestBid && <p>Your latest bid: ₹{latestBid.bidAmount}</p>}
                   {winningMessage && (
                     <p style={{ paddingBottom: "3px" }}>{winningMessage}</p>
                   )}
-                  {!hasTimeElapsed && isLoggedIn && (
-                    <div className={styles.bidControls}>
-                      <Button
-                        variant="outline-secondary"
-                        onClick={decrementBid}
-                        style={{ height: "3rem" }}
-                      >
-                        -
-                      </Button>
-                      <Form.Control
-                        type="number"
-                        value={bid}
-                        ref={bidInputRef}
-                        onChange={handleBidChange}
-                        className={styles.bidInput}
-                        min={minimumBid}
-                        required
-                        style={{
-                          margin: 0,
-                          borderRadius: 0,
-                          width: "7rem",
-                          height: "3rem",
-                        }}
-                        // isInvalid={bid < minimumBid}
-                      />
+                  {!hasTimeElapsed &&
+                    currentProductStatus === "ACTIVE" &&
+                    isLoggedIn &&
+                    (isSeller ? (
+                      <>
+                        {productState.latestBid && (
+                          <div
+                            className={styles.winningBidInfo}
+                            style={{ marginBottom: "1rem" }}
+                          >
+                            <Person
+                              style={{
+                                cursor: "pointer",
+                                marginBottom: "4px",
+                                marginRight: "4px",
+                              }}
+                              onClick={() =>
+                                initiateChatWithBidder(
+                                  productState.latestBid.bidderAnonymous.user
+                                    .userId
+                                )
+                              }
+                            />
+                            <span
+                              style={{ cursor: "pointer" }}
+                              onClick={() =>
+                                initiateChatWithBidder(
+                                  productState.latestBid.bidderAnonymous.user
+                                    .userId
+                                )
+                              }
+                              className={styles.anonSellerLink}
+                            >
+                              {
+                                productState.latestBid.bidderAnonymous
+                                  .anonUsername
+                              }
+                            </span>{" "}
+                            is currently winning with a bid of{" "}
+                            {productState.latestBidAmount}.
+                          </div>
+                        )}
+                        {currentProductStatus === "SOLD" && (
+                          <p style={{ color: "green", fontSize: "1.5rem" }}>
+                            {product.latestBid.bidderAnonymous.user.username}{" "}
+                            won with a bid of {productState.latestBidAmount}
+                          </p>
+                        )}
+                        <div className="bidButton">
+                          {productState.latestBid ? (
+                            <Button
+                              variant="primary"
+                              onClick={handleFreezeBid}
+                              disabled={!productState.latestBid}
+                              style={{ marginBottom: "1rem" }}
+                            >
+                              Freeze Bid
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="danger"
+                              onClick={handleWithdraw}
+                              style={{ marginBottom: "1rem" }}
+                            >
+                              Withdraw
+                            </Button>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className={styles.bidControls}>
+                        <Button
+                          variant="outline-secondary"
+                          onClick={decrementBid}
+                          style={{ height: "3rem" }}
+                        >
+                          -
+                        </Button>
+                        <Form.Control
+                          type="number"
+                          value={bid}
+                          ref={bidInputRef}
+                          onChange={handleBidChange}
+                          className={styles.bidInput}
+                          min={minimumBid}
+                          required
+                          style={{
+                            margin: 0,
+                            borderRadius: 0,
+                            width: "7rem",
+                            height: "3rem",
+                          }}
+                        />
 
-                      <Button
-                        variant="outline-secondary"
-                        onClick={incrementBid}
-                        style={{
-                          height: "3rem",
-                        }}
-                      >
-                        +
-                      </Button>
-                      <Button variant="primary" onClick={handlePlaceBid}>
-                        BID
-                      </Button>
-                    </div>
-                  )}
+                        <Button
+                          variant="outline-secondary"
+                          onClick={incrementBid}
+                          style={{
+                            height: "3rem",
+                          }}
+                        >
+                          +
+                        </Button>
+                        <Button variant="primary" onClick={handlePlaceBid}>
+                          BID
+                        </Button>
+                      </div>
+                    ))}
                   {bidSuccess && (
                     <p style={{ color: "green" }}>Bid placed successfully!</p>
                   )}
@@ -449,9 +676,8 @@ const ProductPopup = ({
 
                   <p>
                     <span>
-                      Product listing started at {productState.startingPrice}
+                      Product listing started at ₹{productState.startingPrice}
                     </span>
-                    <MonetizationOn className={styles.paidIcon} />
                     <span>
                       . There have been{" "}
                       {productState.numberOfBids

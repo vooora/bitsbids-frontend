@@ -12,6 +12,10 @@ import SearchResults from "./pages/SearchResults/SearchResults";
 import UserProfilePage from "./pages/UserProfile/UserProfilePage";
 import MyWalletPage from "./pages/UserProfile/MyWalletPage";
 import Messages from "./pages/Messages/Messages";
+import MySalesPage from "./pages/UserProfile/MySales";
+import MyBidsPage from "./pages/UserProfile/MyBids";
+import InfoForm from "./pages/InfoForm/InfoForm";
+
 function App() {
   return (
     <div className="App">
@@ -28,14 +32,59 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/messages" element={<Messages />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/wallet" element={<MyWalletPage />} />
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <Messages />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user"
+              element={
+                <ProtectedRoute>
+                  <UserProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wallet"
+              element={
+                <ProtectedRoute>
+                  <MyWalletPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sales"
+              element={
+                <ProtectedRoute>
+                  <MySalesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bids"
+              element={
+                <ProtectedRoute>
+                  <MyBidsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <InfoForm />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/login/oauth2/code/google"
               element={<OAuth2CallbackPage />}
             />
-            <Route path="/user" element={<UserProfilePage />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

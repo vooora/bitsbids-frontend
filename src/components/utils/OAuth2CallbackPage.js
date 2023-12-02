@@ -1,17 +1,25 @@
 import { useEffect, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 
 function OAuth2CallbackPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { checkAuthStatus } = useContext(AuthContext);
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    checkAuthStatus().then(() => {
-      setIsChecking(false);
-    });
-  }, [checkAuthStatus]);
+    const searchParams = new URLSearchParams(location.search);
+    const error = searchParams.get("error");
+
+    if (error) {
+      navigate("/", { state: { message: error, variant: "danger" } });
+    } else {
+      checkAuthStatus().then(() => {
+        setIsChecking(false);
+      });
+    }
+  }, [checkAuthStatus, location.search, navigate]);
 
   useEffect(() => {
     if (!isChecking) {

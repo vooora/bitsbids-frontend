@@ -1,12 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./MessagesMenu.css";
+import { Avatar } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
 
-const MessagesMenu = () => {
+const serverBaseUrl = process.env.REACT_APP_BACKEND_URL;
+
+const MessagesMenu = ({ onSessionSelect }) => {
+  const [chatSessions, setChatSessions] = useState([]);
+  const navigate = useNavigate();
+  const fetchUserIdAndChatSessions = useCallback(async () => {
+    try {
+      const userResponse = await axios.get(`${serverBaseUrl}/user/me`);
+      const userId = userResponse.data;
+
+      const chatResponse = await axios.get(
+        `${serverBaseUrl}/chat/sessions/user/${userId}`
+      );
+      const sessionsWithUnreadCounts = await Promise.all(
+        chatResponse.data.map(async (session) => {
+          const unreadCountResponse = await axios.get(
+            `${serverBaseUrl}/chat/unreadCount/${session.id}/${userId}`
+          );
+          return { ...session, unreadCount: unreadCountResponse.data };
+        })
+      );
+
+      setChatSessions(sessionsWithUnreadCounts);
+    } catch (error) {
+      navigate("/", {
+        state: { message: "Error fetching data.", variant: "danger" },
+      });
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchUserIdAndChatSessions();
+  }, [fetchUserIdAndChatSessions]);
+
+  const handleSessionSelect = (selectedSession) => {
+    const updatedSessions = chatSessions.map((session) => {
+      if (session.id === selectedSession.id) {
+        return { ...session, unreadCount: 0 };
+      }
+      return session;
+    });
+
+    setChatSessions(updatedSessions);
+
+    onSessionSelect(selectedSession);
+  };
+
   return (
     <div className="container p-0">
       <div className="row">
         <div className="col-md-12 col-lg-12 col-xl-12 mb-0 mb-md-0">
-          <h5 className="font-weight-bold mb-0 text-center text-lg-start"></h5>
           <div
             className="card p-0"
             style={{ border: "none", height: "calc(100vh - 6vh)" }}
@@ -23,42 +72,50 @@ const MessagesMenu = () => {
             </div>
             <div className="card-body">
               <ul className="list-unstyled mb-0">
-                <li
-                  className="p-3"
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    borderBottom: "1px solid #e0e0e0",
-                  }}
-                >
-                  <a
-                    href="#!"
-                    className="d-flex justify-content-between"
-                    style={{ textDecoration: "none", color: "#000000" }}
+                {chatSessions.map((session) => (
+                  <li
+                    key={session.id}
+                    onClick={() => handleSessionSelect(session)}
+                    className="p-3"
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      borderBottom: "1px solid #e0e0e0",
+                    }}
                   >
-                    <div className="d-flex flex-row">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                        alt="avatar"
-                        className="rounded-circle d-flex align-self-center me-3 shadow-0-strong"
-                        width="50"
-                      />
-                      <div className="pt-0">
-                        <p
-                          className="fw-bold mb-0"
-                          style={{ textDecoration: "none" }}
+                    <a
+                      href="#!"
+                      className="d-flex justify-content-between"
+                      style={{ textDecoration: "none", color: "#000000" }}
+                    >
+                      <div className="d-flex flex-row">
+                        <Avatar
+                          className="rounded-circle d-flex align-self-center me-3 shadow-0-strong"
+                          width="50"
                         >
-                          John Doe
-                        </p>
-                        <p className="small mb-1 p-2">That's great!</p>
+                          {session.receiverUsername.charAt(0)}
+                        </Avatar>
+                        <div className="pt-0">
+                          <p
+                            className="fw-bold mb-0"
+                            style={{ textDecoration: "none" }}
+                          >
+                            {session.receiverUsername || "Anonymous"}
+                          </p>
+                          {/* <p className="small mb-1 p-2">
+                            {session.latestMessage || "No messages yet"}
+                          </p> */}
+                        </div>
                       </div>
-                    </div>
-                    <div className="pt-1">
-                      <span className="badge bg-black float-end custom-badge px-2.5 p-1.5">
-                        1
-                      </span>
-                    </div>
-                  </a>
-                </li>
+                      {session.unreadCount > 0 && (
+                        <div className="pt-1">
+                          <span className="badge bg-black float-end custom-badge px-2.5 p-1.5">
+                            {session.unreadCount}
+                          </span>
+                        </div>
+                      )}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

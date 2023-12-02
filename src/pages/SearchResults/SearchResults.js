@@ -7,7 +7,7 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import styles from "./SearchResults.module.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-const baseUrl = "http://localhost:8080";
+const baseUrl = process.env.REACT_APP_BACKEND_URL;
 
 function SearchResults() {
   const [searchParams] = useSearchParams();

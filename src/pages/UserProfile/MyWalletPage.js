@@ -1,21 +1,28 @@
 import MainNavbar from "../../components/MainNavbar/MainNavbar";
 import LeftColumnProfile from "../../components/UserProfileLeftColumn/LeftColumn";
 import styles from "./UserProfilePage.module.css";
-import { Button, Form, Row, Col } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
-import { MonetizationOn, AccountBalanceWallet } from "@material-ui/icons";
+import { Button, Form, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { AccountBalanceWallet } from "@material-ui/icons";
 import "./UserProfilePage.css";
 import axios from "axios";
 
-const serverBaseUrl = "http://localhost:8080";
+const serverBaseUrl = process.env.REACT_APP_BACKEND_URL;
 
 function MyWalletPage() {
-  const location = useLocation();
-  // const userDetails = location.state?.userDetails;
-  const [userDetails, setUserDetails] = useState(location.state?.userDetails);
+  const [userDetails, setUserDetails] = useState(
+    JSON.parse(localStorage.getItem("userDetails"))
+  );
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    const storedDetails = localStorage.getItem("userDetails");
+    if (storedDetails) {
+      setUserDetails(JSON.parse(storedDetails));
+    }
+  }, []);
 
   const handleSetAmount = (amount) => {
     setInputValue(amount);
@@ -26,10 +33,26 @@ function MyWalletPage() {
     }
   };
 
+  useEffect(() => {
+    if (!userDetails) {
+      const storedDetails = localStorage.getItem("userDetails");
+      if (storedDetails) {
+        setUserDetails(JSON.parse(storedDetails));
+      }
+    } else {
+    }
+  }, [userDetails]);
+
   const handleAddMoney = async () => {
     const amount = parseFloat(inputValue);
     if (isNaN(amount) || amount <= 0) {
-      alert("Please enter a valid amount.");
+      navigate("/wallet", {
+        replace: true,
+        state: {
+          message: "Please enter a valid amount.",
+          variant: "danger",
+        },
+      });
       return;
     }
 
@@ -42,24 +65,23 @@ function MyWalletPage() {
         requestBody
       );
 
-      // Assuming the backend returns the updated wallet balance
       const updatedBalance = response.data.newBalance;
 
-      // Update the userDetails state with the new balance
       setUserDetails((prevDetails) => ({
         ...prevDetails,
         walletBalance: updatedBalance,
       }));
 
-      // Optionally, clear the input field
       setInputValue("");
 
-      alert("Money added to wallet successfully.");
+      navigate("/", {
+        state: { message: "Error getting products.", variant: "danger" },
+      });
     } catch (error) {
       console.error("Error adding money to wallet:", error);
-      alert(
-        "There was an error adding money to your wallet. Please try again later."
-      );
+      navigate("/", {
+        state: { message: "Error getting products.", variant: "danger" },
+      });
     }
   };
 
@@ -109,8 +131,7 @@ function MyWalletPage() {
                   className="display-8 mb-4"
                   style={{ marginRight: "6rem", marginTop: "1rem" }}
                 >
-                  Balance: {userDetails.walletBalance}
-                  <MonetizationOn />
+                  Balance: ₹{userDetails.walletBalance}
                 </h1>
                 <Form
                   className="mb-3 d-flex"
